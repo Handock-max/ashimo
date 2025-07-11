@@ -14,6 +14,9 @@ async function fetchUsersFromSheet() {
   try {
     const response = await fetch(url);
     const data = await response.json();
+
+    console.log("Données brutes récupérées:", data); // <-- AJOUTE ÇA
+
     const rows = data.values;
 
     if (!rows || rows.length === 0) {
@@ -30,6 +33,7 @@ async function fetchUsersFromSheet() {
       return user;
     });
 
+    console.log("Utilisateurs formatés:", users);
     return users;
   } catch (error) {
     console.error("Erreur lors de la récupération des données Google Sheets :", error);
@@ -54,9 +58,13 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
 
   // Chercher utilisateur valide
   const user = users.find(u =>
-    (u.Email.toLowerCase() === username || u.Téléphone === username) &&
-    u.Password === password
+    (u.Email.toLowerCase() === username || u.Téléphone.trim() === username) &&
+    u.Password.trim() === password
   );
+
+  console.log("Identifiant saisi :", username);
+  console.log("Mot de passe saisi :", password);
+  console.log("Utilisateur trouvé :", user);
 
   // Cacher loader
   showLoader(false);
