@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Connexion - Mibo</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Connexion - ASHIMO</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
 </head>
 <body>
   <div class="login-container">
@@ -18,7 +19,7 @@
         <label for="password">Mot de passe</label>
         <input type="password" id="password" name="password" required placeholder="********" />
 
-        <div class="error-message" id="errorMsg">Identifiants invalides</div>
+        <div class="error-message" id="errorMsg" style="display: none;">Identifiants invalides</div>
 
         <button type="submit">Se connecter</button>
 
@@ -27,12 +28,13 @@
     </div>
   </div>
 
-  <div class="loader-container" id="loader">
-  <div class="house-loader">
-    <div class="roof"></div>
-    <div class="walls"></div>
-    <div class="door"></div>
-  </div>
+  <!-- Loader affiché pendant la connexion -->
+  <div class="loader-container" id="loader" style="display: none;">
+    <div class="house-loader">
+      <div class="roof"></div>
+      <div class="walls"></div>
+      <div class="door"></div>
+    </div>
   </div>
 
   <script src="tableau.js"></script>
