@@ -2,13 +2,13 @@ const API_KEY = "AIzaSyCcUePUO9Ji_4zWubaX7s4FmvE863lbmU8";  // remplace par ta v
 const SPREADSHEET_ID = "1kIAvS2GxZjiFWrYaFfvIAs0VwQDt_dkZiXgHHhJyS-4"; // remplace par l’ID de ton Google Sheet
 const SHEET_NAME = "Users";
 
-// Afficher ou masquer le loader
-function showLoader(visible) {
+// Affiche ou cache le loader
+function showLoader(show) {
   const loader = document.getElementById("loader");
-  loader.style.display = visible ? "flex" : "none";
+  loader.style.display = show ? "flex" : "none";
 }
 
-// Charger la liste des utilisateurs
+// Récupère les utilisateurs depuis Google Sheets
 async function fetchUsersFromSheet() {
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
   try {
@@ -16,45 +16,57 @@ async function fetchUsersFromSheet() {
     const data = await response.json();
     const rows = data.values;
 
+    if (!rows || rows.length === 0) {
+      console.error("Aucune donnée trouvée dans la feuille Google Sheets.");
+      return [];
+    }
+
     const headers = rows[0];
     const users = rows.slice(1).map(row => {
       const user = {};
       headers.forEach((header, i) => {
-        user[header] = row[i] || "";
+        user[header] = row[i] ? row[i].toString().trim() : "";
       });
       return user;
     });
 
     return users;
   } catch (error) {
-    console.error("Erreur Google Sheets :", error);
+    console.error("Erreur lors de la récupération des données Google Sheets :", error);
     return [];
   }
 }
 
-// Soumission du formulaire
-document.getElementById("loginForm").addEventListener("submit", async function (e) {
+// Gestion du formulaire de connexion
+document.getElementById("loginForm").addEventListener("submit", async function(e) {
   e.preventDefault();
-  showLoader(true); // Affiche le loader
 
-  const input = document.getElementById("username").value.trim();
+  // Cacher message erreur et afficher loader
+  document.getElementById("errorMsg").style.display = "none";
+  showLoader(true);
+
+  // Récupérer et nettoyer les valeurs saisies
+  const username = document.getElementById("username").value.trim().toLowerCase();
   const password = document.getElementById("password").value.trim();
 
-  const errorMsg = document.getElementById("errorMsg");
-  errorMsg.style.display = "none";
-
+  // Récupérer utilisateurs
   const users = await fetchUsersFromSheet();
 
+  // Chercher utilisateur valide
   const user = users.find(u =>
-    (u.Email === input || u.Téléphone === input) && u.Password === password
+    (u.Email.toLowerCase() === username || u.Téléphone === username) &&
+    u.Password === password
   );
 
-  showLoader(false); // Cache le loader
+  // Cacher loader
+  showLoader(false);
 
   if (user) {
+    // Stocker utilisateur connecté et rediriger
     localStorage.setItem("loggedUser", JSON.stringify(user));
     window.location.href = "tableau.html";
   } else {
-    errorMsg.style.display = "block";
+    // Afficher erreur
+    document.getElementById("errorMsg").style.display = "block";
   }
 });
