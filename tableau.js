@@ -14,7 +14,7 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
     if (username === "admin" && password === "1234") {
       // Authentification réussie
       loader.style.display = "none";
-      window.location.href = "Tableau.html";
+      window.location.href = "tableau.html";
     } else {
       // Échec d’authentification
       loader.style.display = "none";
