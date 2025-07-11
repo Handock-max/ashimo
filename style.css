@@ -1,0 +1,146 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f2f4f8;
+  font-family: 'Segoe UI', sans-serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+.login-box {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.login-box h2 {
+  margin-bottom: 20px;
+  color: #222;
+  text-align: center;
+}
+
+.login-box label {
+  display: block;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  font-size: 16px;
+}
+
+.login-box button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-box button:hover {
+  background-color: #005fa3;
+}
+
+.error-message {
+  display: none;
+  margin-top: 10px;
+  color: #d20000;
+  font-size: 14px;
+  text-align: center;
+}
+
+.forgot-link {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.forgot-link a {
+  color: #0077cc;
+  text-decoration: none;
+}
+
+/* Loader maison */
+.loader-container {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  justify-content: center;
+  align-items: center;
+}
+
+.house-loader {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  animation: bounce 1s infinite;
+}
+
+.roof {
+  width: 0;
+  height: 0;
+  border-left: 40px solid transparent;
+  border-right: 40px solid transparent;
+  border-bottom: 40px solid #4a90e2;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.walls {
+  width: 80px;
+  height: 50px;
+  background-color: #4a90e2;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.door {
+  width: 20px;
+  height: 30px;
+  background-color: #fff;
+  position: absolute;
+  bottom: 10px;
+  left: 30px;
+  border-radius: 3px;
+}
+
+/* Animation rebond */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}

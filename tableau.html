@@ -1,0 +1,35 @@
+<!-- tableau.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Tableau de Bord - ASHIMO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="tableau.css">
+</head>
+<body>
+  <nav class="navbar">
+    <h1>Mibo - Tableau de bord</h1>
+    <button onclick="logout()">Déconnexion</button>
+  </nav>
+
+  <main class="dashboard">
+    <section class="carte" id="infos-generales">
+      <h2>Résumé du portefeuille</h2>
+      <div id="resume-appartements">Chargement…</div>
+    </section>
+
+    <section class="carte" id="paiements-recents">
+      <h2>Paiements récents</h2>
+      <div id="liste-paiements">Chargement…</div>
+    </section>
+
+    <section class="carte" id="alertes">
+      <h2>Alertes</h2>
+      <div id="liste-alertes">Chargement…</div>
+    </section>
+  </main>
+
+  <script src="tableau.js"></script>
+</body>
+</html>

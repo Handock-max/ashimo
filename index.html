@@ -2,127 +2,39 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Localisation requise | CMC Reporting Kit</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f9fafc;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
-      padding: 20px;
-    }
-
-    h1 {
-      font-size: 1.5rem;
-      margin-bottom: 15px;
-      color: #2c3e50;
-    }
-
-    p {
-      font-size: 1rem;
-      color: #555;
-    }
-
-    .spinner {
-      margin-top: 20px;
-      width: 40px;
-      height: 40px;
-      border: 5px solid #f3f3f3;
-      border-top: 5px solid #2980b9;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    #retryBtn {
-      margin-top: 25px;
-      padding: 10px 20px;
-      font-size: 1rem;
-      background-color: #27ae60;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      display: none;
-    }
-
-    #retryBtn:hover {
-      background-color: #1e8449;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Connexion - Mibo</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>📍 Localisation requise pour continuer</h1>
-  <p id="status">Veuillez autoriser la géolocalisation pour accéder au formulaire.</p>
-  <div class="spinner" id="spinner"></div>
-  <button id="retryBtn" onclick="retryLocation()">Réessayer</button>
+  <div class="login-container">
+    <div class="login-box">
+      <h2>ASHIMO - Connexion</h2>
 
-  <script>
-    function redirectToTally(lat, lon) {
-      const tallyURL = "https://tally.so/r/3X7AXV"; // Remplace ici
-      const params = new URLSearchParams({
-        latitude: lat,
-        longitude: lon
-      });
-      const fullURL = `${tallyURL}?${params.toString()}`;
-      window.location.href = fullURL;
-    }
+      <form id="loginForm">
+        <label for="username">Email ou Téléphone</label>
+        <input type="text" id="username" name="username" required placeholder="ex: akashi@example.com" />
 
-    function updateStatus(message, showRetry = false) {
-      document.getElementById("status").textContent = message;
-      document.getElementById("spinner").style.display = showRetry ? "none" : "block";
-      document.getElementById("retryBtn").style.display = showRetry ? "inline-block" : "none";
-    }
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" name="password" required placeholder="********" />
 
-    function getLocation() {
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const lat = position.coords.latitude.toFixed(6);
-            const lon = position.coords.longitude.toFixed(6);
+        <div class="error-message" id="errorMsg">Identifiants invalides</div>
 
-            if (lat && lon) {
-              updateStatus("Localisation récupérée. Redirection en cours...");
-              redirectToTally(lat, lon);
-            } else {
-              updateStatus("Impossible d'obtenir les coordonnées. Activez la localisation puis réessayez.", true);
-            }
-          },
-          (error) => {
-            console.warn("Erreur de géolocalisation : ", error);
-            if (error.code === 1) {
-              updateStatus("Permission de localisation refusée. Merci d'accepter pour continuer.", true);
-            } else if (error.code === 2) {
-              updateStatus("Position non disponible. Essayez à nouveau plus tard.", true);
-            } else if (error.code === 3) {
-              updateStatus("Délai dépassé. Veuillez réessayer.", true);
-            } else {
-              updateStatus("Erreur inconnue. Veuillez réessayer.", true);
-            }
-          },
-          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-        );
-      } else {
-        updateStatus("Votre appareil ne supporte pas la géolocalisation.", true);
-      }
-    }
+        <button type="submit">Se connecter</button>
 
-    function retryLocation() {
-      updateStatus("Nouvelle tentative de récupération de votre position...");
-      getLocation();
-    }
+        <p class="forgot-link"><a href="#">Mot de passe oublié ?</a></p>
+      </form>
+    </div>
+  </div>
 
-    // Lancement immédiat à l'ouverture
-    getLocation();
-  </script>
+  <div class="loader-container" id="loader">
+  <div class="house-loader">
+    <div class="roof"></div>
+    <div class="walls"></div>
+    <div class="door"></div>
+  </div>
+  </div>
+
+  <script src="tableau.js"></script>
 </body>
 </html>
