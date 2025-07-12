@@ -9,7 +9,7 @@
  // }
 
   // Affiche le nom de l'utilisateur
-  document.getElementById("userNameHeader").textContent = userName;
+  //document.getElementById("userNameHeader").textContent = userName;
 
   // Mise à jour dynamique de l'année
   const currentYear = new Date().getFullYear();
