@@ -56,9 +56,9 @@ document.getElementById("loginForm").addEventListener("submit", async function (
 
   showLoader(false);
 
-  const status = (matchingUser.Statut || matchingUser.Status || "").toLowerCase().trim();
+  const status = (matchingUser.Statut || "").toLowerCase().trim();
 
-if (status === "Actif") {
+if (status === "actif") {
   // Connexion autorisée
   localStorage.setItem("loggedUser", JSON.stringify(matchingUser));
   localStorage.setItem("userName", matchingUser["Nom"] || "");
@@ -74,6 +74,7 @@ if (status === "Actif") {
   errorMsg.style.display = "block";
 }
 });
+
 // Ce bloc est à ajouter juste après la gestion du "submit"
 document.getElementById("username").addEventListener("input", () => {
   const errorMsg = document.getElementById("errorMsg");
