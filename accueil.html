@@ -1,34 +1,47 @@
-<!-- tableau.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Acceuil</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="tableau.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accueil – ASHIMO</title>
+  <link rel="stylesheet" href="accueil.css" />
 </head>
 <body>
-  <nav class="navbar">
-    <h1>ASHIMO - Acceuil</h1>
-    <button onclick="logout()">Déconnexion</button>
-  </nav>
+  <!-- Barre de navigation -->
+  <header class="top-bar">
+    <span id="userNameHeader"></span>
+    <button id="menuBtn" class="menu-icon">☰</button>
+  </header>
 
+  <!-- Menu latéral -->
+  <aside id="sideMenu" class="side-menu hidden">
+    <nav>
+      <ul>
+        <li><a href="maisons.html">🏠 Maisons</a></li>
+        <li><a href="locataires.html">👥 Locataires</a></li>
+        <li><a href="paiements.html">💳 Paiements</a></li>
+        <li><a href="revenus.html">📈 Revenus</a></li>
+        <li><a href="#" id="logoutBtn2">🚪 Déconnexion</a></li>
+      </ul>
+    </nav>
+    <footer class="side-footer">
+      ASHIMO © <span id="year"></span> (v1.0)
+    </footer>
+  </aside>
+
+  <!-- Zone centrale -->
   <main class="dashboard">
-    <section class="carte" id="infos-generales">
-      <h2>Résumé du portefeuille</h2>
-      <div id="resume-appartements">Chargement…</div>
-    </section>
-
-    <section class="carte" id="paiements-recents">
-      <h2>Paiements récents</h2>
-      <div id="liste-paiements">Chargement…</div>
-    </section>
-
-    <section class="carte" id="alertes">
-      <h2>Alertes</h2>
-      <div id="liste-alertes">Chargement…</div>
-    </section>
+    <div class="card" onclick="window.location='maisons.html'">🏠<br>Maisons</div>
+    <div class="card" onclick="window.location='locataires.html'">👥<br>Locataires</div>
+    <div class="card" onclick="window.location='paiements.html'">💳<br>Paiements</div>
+    <div class="card" onclick="window.location='revenus.html'">📈<br>Revenus</div>
   </main>
+
+  <!-- Pied de page -->
+  <footer class="footer">
+    <span>© <span id="year2"></span> ASHIMO</span>
+    <a href="#" id="logoutBtn">Déconnexion</a>
+  </footer>
 
   <script src="accueil.js"></script>
 </body>
