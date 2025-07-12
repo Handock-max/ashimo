@@ -1,11 +1,11 @@
-const API_KEY = "AIzaSyCcUePUO9Ji_4zWubaX7s4FmvE863lbmU8";  // remplace par ta vraie clé API
-const SPREADSHEET_ID = "1kIAvS2GxZjiFWrYaFfvIAs0VwQDt_dkZiXgHHhJyS-4"; // remplace par l’ID de ton Google Sheet
+const API_KEY = "AIzaSyCcUePUO9Ji_4zWubaX7s4FmvE863lbmU8";  
+const SPREADSHEET_ID = "1kIAvS2GxZjiFWrYaFfvIAs0VwQDt_dkZiXgHHhJyS-4";
 const SHEET_NAME = "Users";
 
 // Affiche ou cache le loader
 function showLoader(show) {
   const loader = document.getElementById("loader");
-  loader.style.display = show ? "flex" : "none";
+  if (loader) loader.style.display = show ? "flex" : "none";
 }
 
 // Récupère les utilisateurs depuis Google Sheets
@@ -14,29 +14,19 @@ async function fetchUsersFromSheet() {
   try {
     const response = await fetch(url);
     const data = await response.json();
-
-    console.log("Données brutes récupérées:", data); // <-- AJOUTE ÇA
-
     const rows = data.values;
 
-    if (!rows || rows.length === 0) {
-      console.error("Aucune donnée trouvée dans la feuille Google Sheets.");
-      return [];
-    }
+    if (!rows || rows.length === 0) return [];
 
     const headers = rows[0];
-    const users = rows.slice(1).map(row => {
+    return rows.slice(1).map(row => {
       const user = {};
       headers.forEach((header, i) => {
-        user[header] = row[i] ? row[i].toString().trim() : "";
+        user[header.trim()] = row[i] ? row[i].toString().trim() : "";
       });
       return user;
     });
-
-    console.log("Utilisateurs formatés:", users);
-    return users;
   } catch (error) {
-    console.error("Erreur lors de la récupération des données Google Sheets :", error);
     return [];
   }
 }
@@ -44,37 +34,26 @@ async function fetchUsersFromSheet() {
 // Gestion du formulaire de connexion
 document.getElementById("loginForm").addEventListener("submit", async function(e) {
   e.preventDefault();
-
-  // Cacher message erreur et afficher loader
   document.getElementById("errorMsg").style.display = "none";
   showLoader(true);
 
-  // Récupérer et nettoyer les valeurs saisies
   const username = document.getElementById("username").value.trim().toLowerCase();
   const password = document.getElementById("password").value.trim();
-
-  // Récupérer utilisateurs
   const users = await fetchUsersFromSheet();
 
-  // Chercher utilisateur valide
-  const user = users.find(u =>
-    (u.Email.toLowerCase() === username || u.Téléphone.trim() === username) &&
-    u.Password.trim() === password
-  );
+  const user = users.find(u => {
+    const email = (u.Email || "").toLowerCase();
+    const tel = (u.Téléphone || "").replace(/\s+/g, "");
+    return (email === username || tel === username.replace(/\s+/g, "")) && u.Password === password;
+  });
 
-  console.log("Identifiant saisi :", username);
-  console.log("Mot de passe saisi :", password);
-  console.log("Utilisateur trouvé :", user);
-
-  // Cacher loader
   showLoader(false);
 
   if (user) {
-    // Stocker utilisateur connecté et rediriger
     localStorage.setItem("loggedUser", JSON.stringify(user));
+    localStorage.setItem("sessionToken", Date.now().toString());
     window.location.href = "tableau.html";
   } else {
-    // Afficher erreur
     document.getElementById("errorMsg").style.display = "block";
   }
 });
