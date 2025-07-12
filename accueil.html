@@ -2,19 +2,19 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Accueil – ASHIMO</title>
   <link rel="stylesheet" href="accueil.css" />
 </head>
 <body>
   <!-- Barre de navigation -->
   <header class="top-bar">
-    <span id="userNameHeader"></span>
-    <button id="menuBtn" class="menu-icon">☰</button>
+    <span id="userNameHeader">Utilisateur</span>
+    <button id="menuBtn" class="menu-icon" aria-label="Ouvrir le menu">☰</button>
   </header>
 
   <!-- Menu latéral -->
-  <aside id="sideMenu" class="side-menu hidden">
+  <aside id="sideMenu" class="side-menu" aria-hidden="true">
     <nav>
       <ul>
         <li><a href="maisons.html">🏠 Maisons</a></li>
@@ -31,10 +31,22 @@
 
   <!-- Zone centrale -->
   <main class="dashboard">
-    <div class="card" onclick="window.location='maisons.html'">🏠<br>Maisons</div>
-    <div class="card" onclick="window.location='locataires.html'">👥<br>Locataires</div>
-    <div class="card" onclick="window.location='paiements.html'">💳<br>Paiements</div>
-    <div class="card" onclick="window.location='revenus.html'">📈<br>Revenus</div>
+    <div class="card" onclick="window.location='maisons.html'">
+      <div class="icon">🏠</div>
+      <div class="card-title">Maisons</div>
+    </div>
+    <div class="card" onclick="window.location='locataires.html'">
+      <div class="icon">👥</div>
+      <div class="card-title">Locataires</div>
+    </div>
+    <div class="card" onclick="window.location='paiements.html'">
+      <div class="icon">💳</div>
+      <div class="card-title">Paiements</div>
+    </div>
+    <div class="card" onclick="window.location='revenus.html'">
+      <div class="icon">📈</div>
+      <div class="card-title">Revenus</div>
+    </div>
   </main>
 
   <!-- Pied de page -->

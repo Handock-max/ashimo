@@ -1,3 +1,6 @@
+/* ==================== */
+/* Styles Globaux       */
+/* ==================== */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -5,8 +8,12 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  overflow-x: hidden; /* évite scrollbar horizontale lors du menu */
 }
 
+/* ==================== */
+/* Barre de navigation   */
+/* ==================== */
 .top-bar {
   display: flex;
   justify-content: space-between;
@@ -14,19 +21,26 @@ body {
   background-color: #2c3e50;
   color: white;
   padding: 1rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+  user-select: none;
 }
 
 .menu-icon {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   background: none;
   color: white;
   border: none;
   cursor: pointer;
+  user-select: none;
 }
 
+/* ==================== */
+/* Dashboard (Cartes)    */
+/* ==================== */
 .dashboard {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1rem;
   padding: 2rem;
   flex-grow: 1;
@@ -36,31 +50,55 @@ body {
   background-color: white;
   border-radius: 10px;
   text-align: center;
-  padding: 2rem;
+  padding: 2rem 1rem;
   font-size: 1.2rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .card:hover {
   transform: scale(1.05);
 }
 
+.icon {
+  font-size: 4.5rem;
+  margin-bottom: 0.6rem;
+  line-height: 1;
+  user-select: none;
+}
+
+.card-title {
+  font-weight: 600;
+  color: #2c3e50;
+  user-select: none;
+}
+
+/* ==================== */
+/* Pied de page         */
+/* ==================== */
 .footer {
   background-color: #ecf0f1;
   display: flex;
   justify-content: space-between;
   padding: 0.8rem 1rem;
   font-size: 0.9rem;
+  user-select: none;
 }
 
 .footer a {
   text-decoration: none;
   color: #c0392b;
+  cursor: pointer;
 }
 
-/* Side Menu */
+/* ==================== */
+/* Barre latérale        */
+/* ==================== */
 .side-menu {
   position: fixed;
   top: 0;
@@ -75,21 +113,25 @@ body {
   padding: 2rem 1rem;
   box-shadow: -3px 0 6px rgba(0, 0, 0, 0.2);
   z-index: 1000;
+  user-select: none;
 }
 
 .side-menu nav ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .side-menu nav ul li {
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.5rem;
 }
 
 .side-menu nav ul li a {
   color: white;
   text-decoration: none;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
+  user-select: none;
+  cursor: pointer;
 }
 
 .side-footer {
@@ -99,23 +141,32 @@ body {
   text-align: center;
   width: 100%;
   color: #bdc3c7;
+  user-select: none;
 }
 
-/* Menu visible */
+/* Affiche le menu quand la classe visible est ajoutée */
 .side-menu.visible {
   transform: translateX(0);
 }
 
-/* Responsive */
+/* ==================== */
+/* Responsive           */
+/* ==================== */
+
+
 @media (min-width: 768px) {
   .side-menu {
     width: 66%;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
   }
 }
 
 @media (min-width: 1024px) {
   .side-menu {
     width: 33%;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
   }
 
   .dashboard {
