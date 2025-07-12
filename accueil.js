@@ -56,25 +56,23 @@ document.getElementById("loginForm").addEventListener("submit", async function (
 
   showLoader(false);
 
-  if (matchingUser) {
-    const status = (matchingUser.Status || matchingUser.Statut || "").toLowerCase();
-    if (status === "actif") {
-      localStorage.setItem("loggedUser", JSON.stringify(matchingUser));
-      localStorage.setItem("userName", matchingUser["Nom"] || "");
-      localStorage.setItem("userFirstname", matchingUser["Prénoms"] || "");
-      localStorage.setItem("businessName", matchingUser["Business"] || "");
-      localStorage.setItem("userDatabaseID", matchingUser["Database"] || "");
-      localStorage.setItem("userPhoto", matchingUser["Photo"] || "");
-      localStorage.setItem("sessionToken", Date.now().toString());
-      window.location.href = "accueil.html";
-    } else {
-      errorMsg.textContent = "Veuillez payer votre abonnement";
-      errorMsg.style.display = "block";
-    }
-  } else {
-    errorMsg.textContent = "Identifiants invalides";
-    errorMsg.style.display = "block";
-  }
+  const status = (matchingUser.Statut || matchingUser.Status || "").toLowerCase().trim();
+
+if (status === "Actif") {
+  // Connexion autorisée
+  localStorage.setItem("loggedUser", JSON.stringify(matchingUser));
+  localStorage.setItem("userName", matchingUser["Nom"] || "");
+  localStorage.setItem("userFirstname", matchingUser["Prénoms"] || "");
+  localStorage.setItem("businessName", matchingUser["Business"] || "");
+  localStorage.setItem("userDatabaseID", matchingUser["Database"] || "");
+  localStorage.setItem("userPhoto", matchingUser["Photo"] || "");
+  localStorage.setItem("sessionToken", Date.now().toString());
+
+  window.location.href = "accueil.html";
+} else {
+  errorMsg.textContent = "Veuillez payer votre abonnement";
+  errorMsg.style.display = "block";
+}
 });
 // Ce bloc est à ajouter juste après la gestion du "submit"
 document.getElementById("username").addEventListener("input", () => {
