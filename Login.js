@@ -74,14 +74,3 @@ if (status === "actif") {
   errorMsg.style.display = "block";
 }
 });
-
-// Ce bloc est à ajouter juste après la gestion du "submit"
-document.getElementById("username").addEventListener("input", () => {
-  const errorMsg = document.getElementById("errorMsg");
-  if (errorMsg) errorMsg.style.display = "none";
-});
-
-document.getElementById("password").addEventListener("input", () => {
-  const errorMsg = document.getElementById("errorMsg");
-  if (errorMsg) errorMsg.style.display = "none";
-});
