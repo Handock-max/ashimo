@@ -1,7 +1,7 @@
-document.addEventListener("DOMContentLoaded", () => {
+//document.addEventListener("DOMContentLoaded", () => {
   // Vérification de la session utilisateur
-  const token = localStorage.getItem("sessionToken");
-  const userName = localStorage.getItem("userFirstname");
+ // const token = localStorage.getItem("sessionToken");
+ // const userName = localStorage.getItem("userFirstname");
 
 // if (!token || !userName) {
  //   window.location.href = "index.html";
