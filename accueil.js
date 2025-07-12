@@ -3,10 +3,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("sessionToken");
   const userName = localStorage.getItem("userFirstname");
 
-  if (!token || !userName) {
-    window.location.href = "index.html";
-    return; // Stoppe l’exécution si l’utilisateur n’est pas connecté
-  }
+// if (!token || !userName) {
+ //   window.location.href = "index.html";
+ //   return; // Stoppe l’exécution si l’utilisateur n’est pas connecté
+ // }
 
   // Affiche le nom de l'utilisateur
   document.getElementById("userNameHeader").textContent = userName;
