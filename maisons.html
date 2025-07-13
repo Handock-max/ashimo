@@ -42,7 +42,7 @@
     <div class="modal-content form-modal-content">
       <header class="modal-header">
         <h2 id="formTitle">Ajouter une maison</h2>
-        <button id="formCloseBtn" aria-label="Fermer la fenêtre">×</button>
+        <button id="formCloseBtn" aria-label="Fermer la fenêtre">❌</button>
       </header>
       <form id="maisonForm" autocomplete="off">
         <input type="text" name="Nom_Maison" placeholder="Nom Maison *" required />
@@ -59,9 +59,13 @@
         <input type="text" name="Longitude" placeholder="Longitude" />
         <textarea name="Description" placeholder="Description"></textarea>
         <input type="text" name="Gérant" placeholder="Gérant" />
-        <label for="photoInput" class="file-label">Photo (JPEG uniquement) :</label>
+        <label for="photoInput" class="file-label">Photo (JPG/JPEG uniquement) :</label>
         <input id="photoInput" type="file" name="Photo" accept="image/jpeg" />
+
+        <div class="form-actions">
         <button type="submit" id="formSubmitBtn">Enregistrer</button>
+        <button type="button" id="cancelBtn">Annuler</button>  <!-- bouton annuler -->
+        </div>
       </form>
     </div>
   </div>

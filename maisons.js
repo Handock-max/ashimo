@@ -1,4 +1,4 @@
-const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-brMOy6Q3YVgQSdC13e6ro4VGybJi42gQ0kdAQJE0hbEa0boMj8njIUclLPiMo6AHFA/exec";
+const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwvgvAeL23SV7ChsbEox5rjlkoNwm1C33GrLqWgrbX8TTY5UmgKmwx4qk6HZNh52KIMnA/exec";
 const BUSINESS_NAME_STORAGE_KEY = "business";
 const DEFAULT_IMAGE = "maison-defaut.jpg";
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/drqyicfcb/image/upload"; // cloud_name = drqyicfcb
@@ -87,12 +87,21 @@ function init() {
 
   maisonForm.addEventListener("submit", handleFormSubmit);
 
-  confirmDeleteBtn.addEventListener("click", handleConfirmDelete);
-  cancelDeleteBtn.addEventListener("click", () => {
-    deleteModal.classList.add("hidden");
-    maisonToDelete = null;
-    confirmBusinessInput.value = "";
-  });
+// Écouteur pour le bouton Annuler du formulaire modal
+const cancelBtn = document.getElementById("cancelBtn");
+cancelBtn.addEventListener("click", () => {
+  maisonForm.reset(); // Réinitialiser les champs
+  formSection.classList.add("hidden"); // Masquer le formulaire modal
+  currentEditId = null; // Réinitialiser le mode édition
+});
+
+// Gestion du modal de suppression
+confirmDeleteBtn.addEventListener("click", handleConfirmDelete);
+cancelDeleteBtn.addEventListener("click", () => {
+  deleteModal.classList.add("hidden");
+  maisonToDelete = null;
+  confirmBusinessInput.value = "";
+});
 
   prevPageBtn.addEventListener("click", () => {
     if (currentPage > 1) {
