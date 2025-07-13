@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maisons - Ashimo</title>
+  <link rel="stylesheet" href="maisons.css">
+</head>
+<body>
+  <header>
+    <h1 id="businessTitle"></h1>
+    <button id="logoutBtn">Déconnexion</button>
+  </header>
+
+  <main>
+    <!-- Contrôles principaux -->
+    <div id="toolbar">
+      <div id="filterSection">
+        <label for="statusFilter">Filtrer les maisons :</label>
+        <select id="statusFilter">
+          <option value="">Tous</option>
+          <option value="Apt. libre(s)">Apt. libre(s)</option>
+          <option value="Complet">Complet</option>
+        </select>
+      </div>
+      <div id="addMaisonBtn">
+        <button title="Ajouter une maison">
+          <span>+</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Formulaire d'ajout/modification -->
+    <section id="form-section" class="hidden">
+      <h2>Ajouter une maison</h2>
+      <form id="maisonForm">
+        <input type="text" name="Nom_Maison" placeholder="Nom Maison" required>
+        <input type="text" name="Adresse" placeholder="Adresse" required>
+        <input type="text" name="Ville" placeholder="Ville" required>
+        <select name="Etage" id="etageSelect"></select>
+        <select name="Garage">
+          <option value="Oui">Oui</option>
+          <option value="Non">Non</option>
+        </select>
+        <input type="number" name="Nombre_Appartements" placeholder="Nombre d'appartements">
+        <input type="text" name="Latitude" placeholder="Latitude">
+        <input type="text" name="Longitude" placeholder="Longitude">
+        <textarea name="Description" placeholder="Description"></textarea>
+        <input type="text" name="Gérant" placeholder="Gérant">
+        <input type="file" name="Photo" accept="image/jpeg">
+        <button type="submit">Enregistrer</button>
+      </form>
+    </section>
+
+    <!-- Liste des maisons -->
+    <section id="maisonsList"></section>
+  </main>
+
+  <!-- Modal de suppression -->
+  <div id="deleteModal" class="modal hidden">
+    <div class="modal-content">
+      <p>Confirmer la suppression de cette maison ?</p>
+      <input type="text" id="confirmBusiness" placeholder="Nom du business">
+      <button id="confirmDelete">Supprimer</button>
+      <button id="cancelDelete">Annuler</button>
+    </div>
+  </div>
+
+  <script src="maisons.js"></script>
+</body>
+</html>
