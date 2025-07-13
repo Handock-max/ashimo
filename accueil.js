@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   // Vérification de la session utilisateur
-  const token = localStorage.getItem("sessionToken");
+  const token = sessionStorage.getItem("sessionToken");
   const userName = localStorage.getItem("userName");
 
   if (!token || !userName) {
@@ -23,4 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     logout();
   });
+
+  
 });

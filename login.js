@@ -36,6 +36,26 @@ async function fetchUsersFromSheet() {
   }
 }
 
+// === TIMER INACTIVITÉ ===
+
+function startInactivityTimer() {
+  let inactivityTimer;
+
+  function resetTimer() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(() => {
+      sessionStorage.clear();
+      localStorage.clear();      
+      alert("Session expirée après 5 minutes d'inactivité.");
+      window.location.href = "login.html";
+    }, 5 * 60 * 1000); // 5 minutes
+  }
+
+  window.onload = resetTimer;
+  document.onmousemove = resetTimer;
+  document.onkeypress = resetTimer;
+}
+
 // === ÉVÉNEMENT DE SOUMISSION DU FORMULAIRE ===
 
 document.getElementById("loginForm").addEventListener("submit", async function (e) {
@@ -51,7 +71,6 @@ document.getElementById("loginForm").addEventListener("submit", async function (
   const users = await fetchUsersFromSheet();
   showLoader(false);
 
-  // Recherche d'un utilisateur valide
   const matchingUser = users.find(u => {
     const email = (u.Email || "").toLowerCase();
     const tel = (u.Téléphone || "").replace(/\s+/g, "");
@@ -62,30 +81,29 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     );
   });
 
-  // Utilisateur non trouvé
   if (!matchingUser) {
-    errorMsg.textContent = "Identifiant et ou mot de passe invalide(s).";
+    errorMsg.textContent = "Identifiant et/ou mot de passe invalide(s).";
     errorMsg.style.display = "block";
     return;
   }
 
-  // Statut de l'utilisateur
   const status = (matchingUser.Statut || "").toLowerCase().trim();
 
   if (status === "actif") {
-    // Connexion autorisée
-    localStorage.setItem("loggedUser", JSON.stringify(matchingUser));
-    localStorage.setItem("userName", matchingUser["Nom"] || "");
-    localStorage.setItem("userFirstname", matchingUser["Prénoms"] || "");
-    localStorage.setItem("businessName", matchingUser["Business"] || "");
-    localStorage.setItem("userDatabaseID", matchingUser["Database"] || "");
-    localStorage.setItem("userPhoto", matchingUser["Photo"] || "");
-    localStorage.setItem("sessionToken", Date.now().toString());
+    // 🧠 Stockage dans sessionStorage
+    sessionStorage.setItem("sessionToken", Date.now().toString());
 
-    // Optionnel : message ou redirection différée
+    // 📦 Copie vers localStorage
+    localStorage.setItem("username", matchingUser["Nom"] || "");
+    localStorage.setItem("userFirstname", matchingUser["Prénoms"] || "");
+    localStorage.setItem("business", matchingUser["Business"] || "");
+    localStorage.setItem("database", matchingUser["Database"] || "");
+    localStorage.setItem("photo", matchingUser["Photo"] || "");
+    localStorage.setItem("status", status);
+
+    // Redirection + activation du timer
     window.location.href = "accueil.html";
   } else {
-    // Compte inactif
     errorMsg.textContent = "Compte inactif. Veuillez renouveler votre abonnement.";
     errorMsg.style.display = "block";
   }
@@ -102,3 +120,9 @@ document.getElementById("password").addEventListener("input", () => {
   const errorMsg = document.getElementById("errorMsg");
   if (errorMsg) errorMsg.style.display = "none";
 });
+
+// === DÉMARRAGE TIMER SUR PAGE PROTÉGÉE ===
+// (à placer dans les autres pages comme accueil.html, maisons.html, etc.)
+if (window.location.pathname.includes("accueil") || window.location.pathname.includes("maisons")) {
+  startInactivityTimer();
+}
