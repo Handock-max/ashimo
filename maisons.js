@@ -342,4 +342,90 @@ document.getElementById("confirmDelete").addEventListener("click", async () => {
 
   // Simuler suppression en effaçant la ligne dans Google Sheets (à implémenter côté serveur)
   // Ici on enlève de la liste locale seulement
-  maisons = maisons.filter(m => m.ID_M
+  maisons = maisons.filter(m => m.ID_Maison !== maisonToDelete.ID_Maison);
+
+  showLoader(false);
+  maisonToDelete = null;
+  document.getElementById("deleteModal").classList.add("hidden");
+
+  // Rafraîchir affichage
+  filteredMaisons = filterMaisonsByStatus(document.getElementById("statusFilter").value);
+  displayMaisons(filteredMaisons);
+});
+
+// Gestion filtre changement
+document.getElementById("statusFilter").addEventListener("change", e => {
+  const val = e.target.value;
+  filteredMaisons = filterMaisonsByStatus(val);
+  displayMaisons(filteredMaisons);
+});
+
+// Bouton ajout nouvelle maison
+document.getElementById("addMaisonBtn").addEventListener("click", () => {
+  openEditForm(null);
+});
+
+// Bouton annuler formulaire
+document.getElementById("cancelForm").addEventListener("click", e => {
+  e.preventDefault();
+  closeForm();
+});
+
+// Déconnexion
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  sessionStorage.clear();
+  localStorage.clear();
+  window.location.href = "index.html";
+});
+
+// Timer d’inactivité (5 min)
+function resetInactivityTimer() {
+  if (inactivityTimer) clearTimeout(inactivityTimer);
+  inactivityTimer = setTimeout(() => {
+    alert("Session expirée pour cause d'inactivité. Veuillez vous reconnecter.");
+    sessionStorage.clear();
+    window.location.href = "index.html";
+  }, INACTIVITY_LIMIT_MS);
+}
+
+// Réinitialiser timer sur action utilisateur
+["click", "keydown", "mousemove", "touchstart"].forEach(evt => {
+  window.addEventListener(evt, resetInactivityTimer);
+});
+
+// Initialisation principale async
+async function init() {
+  showBusinessTitle();
+
+  // Charger config (localStorage ou fetch)
+  let config = loadConfigFromLocalStorage();
+  if (!config) {
+    const rawConfig = await fetchSheetData(SHEET_CONFIG);
+    // Transform config en objet {colonne: [valeurs]}
+    config = {};
+    if (rawConfig.length) {
+      // Pour chaque colonne, récupérer valeurs non vides
+      Object.keys(rawConfig[0]).forEach(col => {
+        config[col] = rawConfig.map(r => r[col]).filter(v => v && v.trim() !== "");
+      });
+      saveConfigToLocalStorage(config);
+    }
+  }
+  configData = config;
+
+  // Remplir listes déroulantes du formulaire
+  if (configData.Etage) buildSelectOptions(document.getElementById("Etage"), configData.Etage);
+  if (configData.Garage) buildSelectOptions(document.getElementById("Garage"), configData.Garage);
+  // Autres listes à prévoir si besoin...
+
+  // Charger maisons
+  maisons = await fetchSheetData(SHEET_MAISON);
+  filteredMaisons = filterMaisonsByStatus("");
+
+  displayMaisons(filteredMaisons);
+
+  resetInactivityTimer();
+}
+
+// Lancer init au chargement
+window.addEventListener("DOMContentLoaded", init);
