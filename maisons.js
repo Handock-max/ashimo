@@ -1,4 +1,4 @@
-const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyOJN9jmoWwecD-kWjKhK6rqLh3sFwX3UMQykzaz7DA7vCarmPRdUcl49zVVql9A3-1aA/exec";
+const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0jRWG5PSz0qAyNpI6iMsvPg5XnDFIOEjR1RuIOSOUby_5NVz4dzJwJpZ6u2iVPbxxTA/exec";
 const BUSINESS_NAME_STORAGE_KEY = "business";
 const DEFAULT_IMAGE = "maison-defaut.jpg";
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/drqyicfcb/image/upload"; // cloud_name = drqyicfcb
