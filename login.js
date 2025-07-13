@@ -94,7 +94,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     sessionStorage.setItem("sessionToken", Date.now().toString());
 
     // 📦 Copie vers localStorage
-    localStorage.setItem("username", matchingUser["Nom"] || "");
+    localStorage.setItem("userName", matchingUser["Nom"] || "");
     localStorage.setItem("userFirstname", matchingUser["Prénoms"] || "");
     localStorage.setItem("business", matchingUser["Business"] || "");
     localStorage.setItem("database", matchingUser["Database"] || "");

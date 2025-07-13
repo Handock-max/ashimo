@@ -5,8 +5,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!token || !userName) {
     window.location.href = "index.html";
-    return; // Stoppe l’exécution si l’utilisateur n’est pas connecté
-  }
+    return;
+    } else {
+  // Démarre le timer d’inactivité
+  startInactivityTimer();
+  } // Stoppe l’exécution si l’utilisateur n’est pas connecté
+
 
   // Affiche le nom de l'utilisateur
   document.getElementById("userNameHeader").textContent = userName;
@@ -24,5 +28,23 @@ document.addEventListener("DOMContentLoaded", () => {
     logout();
   });
 
-  
+//TIMER
+  function startInactivityTimer() {
+  let inactivityTimer;
+
+  function resetTimer() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(() => {
+      sessionStorage.clear();
+      localStorage.clear();      
+      alert("Session expirée après 5 minutes d'inactivité.");
+      window.location.href = "login.html";
+    }, 5 * 60 * 1000); // 5 minutes
+  }
+
+  window.onload = resetTimer;
+  document.onmousemove = resetTimer;
+  document.onkeypress = resetTimer;
+}
+
 });
