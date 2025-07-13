@@ -1,81 +1,97 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Maisons - Ashimo</title>
-  <link rel="stylesheet" href="maisons.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gestion Maisons - Ashimo</title>
+  <link rel="stylesheet" href="maisons.css" />
 </head>
 <body>
-  <header>
-  <div class="header-left">
-    <button id="backBtn" title="Retour">←</button>
-  </div>
 
+<header>
+  <div class="header-left">
+    <button id="backBtn" aria-label="Retour" title="Retour">◀</button>
+  </div>
   <div class="header-center">
     <h1 id="businessTitle"></h1>
   </div>
-
   <div class="header-right">
-    <button id="logoutBtn">Déconnexion</button>
+    <button id="logoutBtn" title="Déconnexion">❌</button>
   </div>
-    
-  </header>
+</header>
 
-  <main>
-    <!-- Contrôles principaux -->
-    <div id="toolbar">
-      <div id="filterSection">
-        <label for="statusFilter">Filtrer les maisons :</label>
-        <select id="statusFilter">
-          <option value="">Tous</option>
-          <option value="Apt. libre(s)">Apt. libre(s)</option>
-          <option value="Complet">Complet</option>
-        </select>
-      </div>
-      <div id="addMaisonBtn">
-        <button title="Ajouter une maison">
-          <span>+</span>
-        </button>
-      </div>
+<main>
+  <div id="toolbar">
+    <div id="filterSection">
+      <label for="statusFilter">Filtrer les maisons :       </label>
+      <select id="statusFilter" name="statusFilter">
+        <option value="">Tous</option>
+        <option value="Apt. libre(s)">Apt. libre(s)</option>
+        <option value="Complet">Complet</option>
+      </select>
     </div>
+    <div id="addMaisonBtn">
+      <button title="Ajouter une maison" aria-label="Ajouter une maison">
+        <span>+</span>
+      </button>
+    </div>
+  </div>
 
-    <!-- Formulaire d'ajout/modification -->
-    <section id="form-section" class="hidden">
-      <h2>Ajouter une maison</h2>
-      <form id="maisonForm">
-        <input type="text" name="Nom_Maison" placeholder="Nom Maison" required>
-        <input type="text" name="Adresse" placeholder="Adresse" required>
-        <input type="text" name="Ville" placeholder="Ville" required>
-        <select name="Etage" id="etageSelect"></select>
-        <select name="Garage">
+  <!-- Modale Formulaire Ajout/Modification -->
+  <div id="formModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="formTitle">
+    <div class="modal-content form-modal-content">
+      <header class="modal-header">
+        <h2 id="formTitle">Ajouter une maison</h2>
+        <button id="formCloseBtn" aria-label="Fermer la fenêtre">×</button>
+      </header>
+      <form id="maisonForm" autocomplete="off">
+        <input type="text" name="Nom_Maison" placeholder="Nom Maison *" required />
+        <input type="text" name="Adresse" placeholder="Adresse *" required />
+        <input type="text" name="Ville" placeholder="Ville *" required />
+        <select name="Etage" id="etageSelect" required></select>
+        <select name="Garage" required>
+          <option value="" disabled selected>Garage ? *</option>
           <option value="Oui">Oui</option>
           <option value="Non">Non</option>
         </select>
-        <input type="number" name="Nombre_Appartements" placeholder="Nombre d'appartements">
-        <input type="text" name="Latitude" placeholder="Latitude">
-        <input type="text" name="Longitude" placeholder="Longitude">
+        <input type="number" name="Nombre_Appartements" placeholder="Nombre d'appartements" min="0" />
+        <input type="text" name="Latitude" placeholder="Latitude" />
+        <input type="text" name="Longitude" placeholder="Longitude" />
         <textarea name="Description" placeholder="Description"></textarea>
-        <input type="text" name="Gérant" placeholder="Gérant">
-        <input type="file" name="Photo" accept="image/jpeg">
-        <button type="submit">Enregistrer</button>
+        <input type="text" name="Gérant" placeholder="Gérant" />
+        <label for="photoInput" class="file-label">Photo (JPEG uniquement) :</label>
+        <input id="photoInput" type="file" name="Photo" accept="image/jpeg" />
+        <button type="submit" id="formSubmitBtn">Enregistrer</button>
       </form>
-    </section>
-
-    <!-- Liste des maisons -->
-    <section id="maisonsList"></section>
-  </main>
-
-  <!-- Modal de suppression -->
-  <div id="deleteModal" class="modal hidden">
-    <div class="modal-content">
-      <p>Confirmer la suppression de cette maison ?</p>
-      <input type="text" id="confirmBusiness" placeholder="Nom du business">
-      <button id="confirmDelete">Supprimer</button>
-      <button id="cancelDelete">Annuler</button>
     </div>
   </div>
 
-  <script src="maisons.js"></script>
+  <!-- Liste des maisons -->
+  <section id="maisonsList" aria-live="polite" aria-label="Liste des maisons"></section>
+
+  <!-- Pagination -->
+  <nav id="pagination" class="hidden" aria-label="Pagination maisons">
+    <button id="prevPageBtn" aria-label="Page précédente">←</button>
+    <span id="pageIndicator">Page 1</span>
+    <button id="nextPageBtn" aria-label="Page suivante">→</button>
+  </nav>
+
+  <!-- Modal suppression -->
+  <div id="deleteModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="deleteTitle">
+    <div class="modal-content">
+      <h3 id="deleteTitle">Confirmer la suppression</h3>
+      <p>Pour supprimer cette maison, tapez le nom exact du business :</p>
+      <input type="text" id="confirmBusiness" aria-label="Nom du business" placeholder="Nom du business" />
+      <div class="modal-buttons">
+        <button id="confirmDelete" class="danger">Supprimer</button>
+        <button id="cancelDelete">Annuler</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script src="maisons.js"></script>
+
 </body>
 </html>
