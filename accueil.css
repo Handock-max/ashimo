@@ -3,12 +3,12 @@
 /* ==================== */
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: Montserrat, sans-serif;
   background-color: #f6f6f6;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  overflow-x: hidden; /* évite scrollbar horizontale lors du menu */
+  overflow-x: hidden;
 }
 
 /* ==================== */
@@ -26,13 +26,16 @@ body {
   user-select: none;
 }
 
-.menu-icon {
-  font-size: 1.8rem;
+/* Bouton déconnexion (croix) */
+.logout-icon {
+  font-size: 2.2rem;
   background: none;
   color: white;
   border: none;
   cursor: pointer;
   user-select: none;
+  line-height: 1;
+  padding: 0;
 }
 
 /* ==================== */
@@ -51,7 +54,7 @@ body {
   border-radius: 10px;
   text-align: center;
   padding: 2rem 1rem;
-  font-size: 1.2rem;
+  font-size: 20px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.2s;
@@ -66,7 +69,7 @@ body {
 }
 
 .icon {
-  font-size: 4.5rem;
+  font-size: 8.5rem;
   margin-bottom: 0.6rem;
   line-height: 1;
   user-select: none;
@@ -76,99 +79,28 @@ body {
   font-weight: 600;
   color: #2c3e50;
   user-select: none;
+  font-size: 40px;
 }
 
+footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 20px;
+      color: #2c3e50;
+    }
 /* ==================== */
-/* Pied de page         */
+/* Suppression des styles liés à sidebar et footer */
 /* ==================== */
-.footer {
-  background-color: #ecf0f1;
-  display: flex;
-  justify-content: space-between;
-  padding: 0.8rem 1rem;
-  font-size: 0.9rem;
-  user-select: none;
-}
+/* Plus besoin de side-menu ni footer donc on ne les garde pas */
 
-.footer a {
-  text-decoration: none;
-  color: #c0392b;
-  cursor: pointer;
-}
-
-/* ==================== */
-/* Barre latérale        */
-/* ==================== */
-.side-menu {
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100%;
-  background: #34495e;
-  color: white;
-  width: 80%;
-  max-width: 300px;
-  transform: translateX(100%);
-  transition: transform 0.3s ease-in-out;
-  padding: 2rem 1rem;
-  box-shadow: -3px 0 6px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  user-select: none;
-}
-
-.side-menu nav ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.side-menu nav ul li {
-  margin-bottom: 1.5rem;
-}
-
-.side-menu nav ul li a {
-  color: white;
-  text-decoration: none;
-  font-size: 1.2rem;
-  user-select: none;
-  cursor: pointer;
-}
-
-.side-footer {
-  position: absolute;
-  bottom: 1rem;
-  font-size: 0.9rem;
-  text-align: center;
-  width: 100%;
-  color: #bdc3c7;
-  user-select: none;
-}
-
-/* Affiche le menu quand la classe visible est ajoutée */
-.side-menu.visible {
-  transform: translateX(0);
-}
-
-/* ==================== */
-/* Responsive           */
-/* ==================== */
-
-
+/* Responsive */
 @media (min-width: 768px) {
-  .side-menu {
-    width: 66%;
-    transform: translateX(100%);
-    transition: transform 0.3s ease-in-out;
+  .dashboard {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
 }
 
 @media (min-width: 1024px) {
-  .side-menu {
-    width: 33%;
-    transform: translateX(100%);
-    transition: transform 0.3s ease-in-out;
-  }
-
   .dashboard {
     grid-template-columns: repeat(4, 1fr);
   }

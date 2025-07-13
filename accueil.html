@@ -10,49 +10,32 @@
   <!-- Barre de navigation -->
   <header class="top-bar">
     <span id="userNameHeader">Utilisateur</span>
-    <button id="menuBtn" class="menu-icon" aria-label="Ouvrir le menu">☰</button>
+    <!-- Bouton déconnexion avec icône croix -->
+    <button id="logoutBtn" class="logout-icon" aria-label="Déconnexion">❌</button>
   </header>
-
-  <!-- Menu latéral -->
-  <aside id="sideMenu" class="side-menu" aria-hidden="true">
-    <nav>
-      <ul>
-        <li><a href="maisons.html">🏠 Maisons</a></li>
-        <li><a href="locataires.html">👥 Locataires</a></li>
-        <li><a href="paiements.html">💳 Paiements</a></li>
-        <li><a href="revenus.html">📈 Revenus</a></li>
-        <li><a href="index.html" id="logoutBtn2">🚪 Déconnexion</a></li>
-      </ul>
-    </nav>
-    <footer class="side-footer">
-      ASHIMO © <span id="year"></span> (v1.0)
-    </footer>
-  </aside>
 
   <!-- Zone centrale -->
   <main class="dashboard">
     <div class="card" onclick="window.location='maisons.html'">
       <div class="icon">🏠</div>
-      <div class="card-title">Maisons</div>
+      <div class="card-title">MAISONS</div>
     </div>
     <div class="card" onclick="window.location='locataires.html'">
       <div class="icon">👥</div>
-      <div class="card-title">Locataires</div>
+      <div class="card-title">LOCATAIRES</div>
     </div>
     <div class="card" onclick="window.location='paiements.html'">
-      <div class="icon">💳</div>
-      <div class="card-title">Paiements</div>
+      <div class="icon">💵</div>
+      <div class="card-title">PAIEMENTS</div>
     </div>
     <div class="card" onclick="window.location='revenus.html'">
       <div class="icon">📈</div>
-      <div class="card-title">Revenus</div>
+      <div class="card-title">REVENUS</div>
     </div>
   </main>
 
-  <!-- Pied de page -->
-  <footer class="footer">
-    <span>© <span id="year2"></span> ASHIMO</span>
-    <a href="index.html" id="logoutBtn">Déconnexion</a>
+  <footer>
+    <strong>ASHIMO © 2025 <br> Application de gestion locative</strong>
   </footer>
 
   <script src="accueil.js"></script>
