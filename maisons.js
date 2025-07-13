@@ -1,223 +1,243 @@
-// Constantes et variables globales
-const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8vCDd3k1XdYuojuLh5HGprdJ5LsbWxfmyTxvXyyFewwW4lBAJ1HPhvNAY9N78_f7DFg/exec";
-const BUSINESS_NAME_STORAGE_KEY = "businessName";
+const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRfuzAwi3TkC9YOvIb-iKsZClMUT3H8MR4sH-ERAKGxpQYWEINaR9DL6HytJQAT54BpQ/exec";
+const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/ashimo/image/upload";
+const CLOUDINARY_PRESET = "ashimo_unsigned";
+const DEFAULT_IMAGE = "maison-defaut.jpg";
+const BUSINESS_NAME_STORAGE_KEY = "business";
 
-// Éléments DOM
+// Références DOM
+const maisonsList = document.getElementById("maisonsList");
+const statusFilter = document.getElementById("statusFilter");
 const businessTitle = document.getElementById("businessTitle");
 const logoutBtn = document.getElementById("logoutBtn");
-const statusFilter = document.getElementById("statusFilter");
-const maisonsList = document.getElementById("maisonsList");
-const addMaisonBtn = document.querySelector("#addMaisonBtn button");
+const backBtn = document.getElementById("backBtn");
+
 const formSection = document.getElementById("form-section");
 const maisonForm = document.getElementById("maisonForm");
+const addMaisonBtn = document.querySelector("#addMaisonBtn button");
+
 const deleteModal = document.getElementById("deleteModal");
 const confirmBusinessInput = document.getElementById("confirmBusiness");
 const confirmDeleteBtn = document.getElementById("confirmDelete");
 const cancelDeleteBtn = document.getElementById("cancelDelete");
 
-let maisonsData = []; // données maisons chargées
-let maisonToDelete = null; // maison sélectionnée pour suppression
+let maisonsData = [];
+let maisonToDelete = null;
+let currentEditId = null;
 
-// --- Gestion session ---
-function getBusinessName() {
-  return localStorage.getItem(BUSINESS_NAME_STORAGE_KEY);
-}
-
-function setBusinessName(name) {
-  localStorage.setItem(BUSINESS_NAME_STORAGE_KEY, name);
-}
-
-function clearSession() {
-  localStorage.removeItem(BUSINESS_NAME_STORAGE_KEY);
-}
-
-// --- Initialisation de la page ---
 function init() {
-  // Vérifier présence businessName sinon rediriger vers login (à adapter)
-  const businessName = getBusinessName();
-  if (!businessName) {
-    alert("Session expirée ou non trouvée. Veuillez vous reconnecter.");
-    window.location.href = "index.html"; // ou ta page login
-    return;
+  const businessName = localStorage.getItem(BUSINESS_NAME_STORAGE_KEY);
+  const token = sessionStorage.getItem("sessionToken");
+
+  // Sécurité : redirection si session expirée
+  if (!businessName || !token) {
+    return (window.location.href = "index.html");
   }
+
+  // Affichage du nom du business centré dans le header
   businessTitle.textContent = businessName;
 
-  // Charger les données depuis Apps Script
-  loadMaisons();
+  // Bouton retour (vers accueil ou dashboard)
+  if (backBtn) {
+    backBtn.addEventListener("click", () => {
+      window.location.href = "accueil.html";
+    });
+  }
 
-  // Évènements
-  logoutBtn.addEventListener("click", () => {
-    clearSession();
-    window.location.href = "index.html";
-  });
+  // Déconnexion
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      sessionStorage.clear();
+      localStorage.clear();
+      window.location.href = "index.html";
+    });
+  }
 
+  // Filtrage des maisons selon le statut
   statusFilter.addEventListener("change", () => {
     renderMaisons(filterMaisons());
   });
 
+  // Ajout nouvelle maison
   addMaisonBtn.addEventListener("click", () => {
-    openForm();
+    maisonForm.reset();
+    currentEditId = null;
+    formSection.classList.remove("hidden");
   });
 
+  // Soumission formulaire
   maisonForm.addEventListener("submit", handleFormSubmit);
 
+  // Suppression : confirmation ou annulation
   confirmDeleteBtn.addEventListener("click", handleConfirmDelete);
-  cancelDeleteBtn.addEventListener("click", closeDeleteModal);
+  cancelDeleteBtn.addEventListener("click", () => {
+    deleteModal.classList.add("hidden");
+    maisonToDelete = null;
+  });
+
+  // Charger les données
+  loadMaisons();
 }
 
-// --- Chargement des maisons via GET ---
 async function loadMaisons() {
   try {
-    const response = await fetch(APP_SCRIPT_URL);
-    if (!response.ok) throw new Error("Erreur réseau lors du chargement");
-    const result = await response.json();
-    if (result.status !== "ok") throw new Error("Erreur API: " + result.message);
-
-    // Supposons que ton API GET renvoie un tableau 'maisons' en plus de status/message
-    // Exemple attendu: { status:"ok", message:"API en ligne", maisons: [ {...}, {...} ] }
-    if (!result.maisons || !Array.isArray(result.maisons)) {
-      throw new Error("Format de données inattendu");
-    }
-
-    maisonsData = result.maisons;
-    renderMaisons(maisonsData);
-  } catch (err) {
-    console.error(err);
-    alert("Impossible de charger les maisons : " + err.message);
+    const res = await fetch(APP_SCRIPT_URL);
+    const json = await res.json();
+    maisonsData = json.maisons || [];
+    renderMaisons(filterMaisons());
+  } catch (e) {
+    alert("Erreur de chargement : " + e.message);
   }
 }
 
-// --- Filtrage par statut ---
 function filterMaisons() {
-  const filterValue = statusFilter.value;
-  if (!filterValue) return maisonsData;
-  return maisonsData.filter(m => m.Statut === filterValue);
+  const f = statusFilter.value;
+  return f ? maisonsData.filter(m => m.Statut === f) : maisonsData;
 }
 
-// --- Affichage des maisons ---
 function renderMaisons(data) {
   maisonsList.innerHTML = "";
+
   if (data.length === 0) {
-    maisonsList.innerHTML = `<p>Aucune maison trouvée pour ce filtre.</p>`;
+    maisonsList.innerHTML = `<p>Aucune maison à afficher.</p>`;
     return;
   }
+
   data.forEach(maison => {
-    const card = createMaisonCard(maison);
+    const card = document.createElement("div");
+    card.className = "maison-card";
+
+    const image = maison.Photo ? maison.Photo : DEFAULT_IMAGE;
+
+    card.innerHTML = `
+      <img src="${image}" class="maison-img" />
+      <div class="maison-content">
+        <h3>${maison.Nom_Maison}</h3>
+        <p>${maison.Adresse}, ${maison.Ville}</p>
+        <div class="info-row"><span>Étage:</span><span>${maison.Etage}</span></div>
+        <div class="info-row"><span>Garage:</span><span>${maison.Garage}</span></div>
+        <div class="info-row"><span>Appartements:</span><span>${maison.Nombre_Appartements}</span></div>
+        <div class="info-row"><span>Gérant:</span><span>${maison.Gérant || ""}</span></div>
+        <div class="card-actions">
+          <button class="edit-btn" data-id="${maison.ID_Maison}">Modifier</button>
+          <button class="delete-btn" data-id="${maison.ID_Maison}">Supprimer</button>
+        </div>
+      </div>
+    `;
+
+    // Bouton supprimer
+    card.querySelector(".delete-btn").addEventListener("click", () => {
+      maisonToDelete = maison;
+      deleteModal.classList.remove("hidden");
+    });
+
+    // Bouton modifier
+    card.querySelector(".edit-btn").addEventListener("click", () => {
+      currentEditId = maison.ID_Maison;
+      populateForm(maison);
+      formSection.classList.remove("hidden");
+    });
+
     maisonsList.appendChild(card);
   });
 }
 
-// --- Création carte maison ---
-function createMaisonCard(maison) {
-  const card = document.createElement("div");
-  card.className = "maison-card";
-
-  const photoUrl = maison.Photo || "default-house.jpg"; // image par défaut si aucune photo
-
-  card.innerHTML = `
-    <img src="${photoUrl}" alt="Photo ${maison.Nom_Maison}" class="maison-img" />
-    <div class="maison-content">
-      <h3>${escapeHtml(maison.Nom_Maison)}</h3>
-      <p>${escapeHtml(maison.Adresse)}, ${escapeHtml(maison.Ville)}</p>
-      <div class="info-row"><span>Étage :</span><span>${escapeHtml(maison.Etage)}</span></div>
-      <div class="info-row"><span>Garage :</span><span>${escapeHtml(maison.Garage)}</span></div>
-      <div class="info-row"><span>Appartements :</span><span>${escapeHtml(maison.Nombre_Appartements)}</span></div>
-      <div class="info-row"><span>Gérant :</span><span>${escapeHtml(maison.Gérant)}</span></div>
-      <p>${escapeHtml(maison.Description)}</p>
-      <div class="card-actions">
-        <button class="edit-btn" data-id="${maison.ID_Maison}">Modifier</button>
-        <button class="delete-btn" data-id="${maison.ID_Maison}">Supprimer</button>
-      </div>
-    </div>
-  `;
-
-  // Évènements bouton supprimer
-  card.querySelector(".delete-btn").addEventListener("click", () => {
-    openDeleteModal(maison);
-  });
-
-  // TODO: ajout modification (edit) plus tard si tu veux
-  card.querySelector(".edit-btn").addEventListener("click", () => {
-    alert("Fonction modification non encore implémentée");
-  });
-
-  return card;
+function populateForm(maison) {
+  for (const field of maisonForm.elements) {
+    if (field.name && maison[field.name] !== undefined && field.type !== "file") {
+      field.value = maison[field.name];
+    }
+  }
 }
 
-// --- Échappement HTML basique pour éviter injection ---
-function escapeHtml(text) {
-  if (!text) return "";
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
+async function handleFormSubmit(e) {
+  e.preventDefault();
+  const formData = new FormData(maisonForm);
+  const payload = {};
 
-// --- Gestion formulaire ---
+  for (const [key, value] of formData.entries()) {
+    if (key !== "Photo") payload[key] = value;
+  }
 
-function openForm() {
-  formSection.classList.remove("hidden");
-  maisonForm.reset();
-  maisonForm.querySelector("h2").textContent = "Ajouter une maison";
-}
+  const businessName = localStorage.getItem(BUSINESS_NAME_STORAGE_KEY);
+  if (!businessName) return alert("Session expirée");
 
-function closeForm() {
-  formSection.classList.add("hidden");
-}
+  payload.businessName = businessName;
+  payload.mode = currentEditId ? "edit" : "add";
+  if (currentEditId) payload.ID_Maison = currentEditId;
 
-function handleFormSubmit(event) {
-  event.preventDefault();
-  alert("Ajout / modification non encore implémenté");
-  closeForm();
-}
+  const imageFile = formData.get("Photo");
+  if (imageFile && imageFile.name) {
+    try {
+      const imageUrl = await uploadToCloudinary(imageFile);
+      payload.Photo = imageUrl;
+    } catch (err) {
+      alert("Échec de l'upload image : " + err.message);
+      return;
+    }
+  }
 
-// --- Gestion suppression ---
-
-function openDeleteModal(maison) {
-  maisonToDelete = maison;
-  confirmBusinessInput.value = "";
-  deleteModal.classList.remove("hidden");
-  confirmBusinessInput.focus();
-}
-
-function closeDeleteModal() {
-  deleteModal.classList.add("hidden");
-  maisonToDelete = null;
+  try {
+    const res = await fetch(APP_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const result = await res.json();
+    if (result.status === "success") {
+      alert("Maison enregistrée avec succès");
+      maisonForm.reset();
+      formSection.classList.add("hidden");
+      currentEditId = null;
+      loadMaisons();
+    } else {
+      alert("Erreur : " + result.message);
+    }
+  } catch (e) {
+    alert("Erreur réseau : " + e.message);
+  }
 }
 
 async function handleConfirmDelete() {
-  const inputName = confirmBusinessInput.value.trim();
-  if (!maisonToDelete) return alert("Aucune maison sélectionnée");
-  if (inputName !== getBusinessName()) {
-    alert("Le nom du business est incorrect");
-    return;
-  }
+  const nom = confirmBusinessInput.value.trim();
+  const expected = localStorage.getItem(BUSINESS_NAME_STORAGE_KEY);
+  if (!maisonToDelete || nom !== expected) return alert("Nom incorrect");
 
-  // Appel API suppression via POST
   try {
-    const response = await fetch(APP_SCRIPT_URL, {
+    const res = await fetch(APP_SCRIPT_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ID_Maison: maisonToDelete.ID_Maison,
-        businessName: inputName,
+        businessName: expected,
       }),
     });
-    const result = await response.json();
+
+    const result = await res.json();
     if (result.status === "success") {
-      alert("Maison supprimée avec succès !");
-      closeDeleteModal();
-      // Recharge les données
+      alert("Maison supprimée.");
+      deleteModal.classList.add("hidden");
+      maisonToDelete = null;
       loadMaisons();
     } else {
-      alert("Erreur lors de la suppression : " + (result.message || "Inconnue"));
+      alert("Erreur : " + result.message);
     }
-  } catch (err) {
-    alert("Erreur réseau lors de la suppression : " + err.message);
+  } catch (e) {
+    alert("Erreur réseau : " + e.message);
   }
 }
 
-// --- Lancement ---
+async function uploadToCloudinary(file) {
+  const data = new FormData();
+  data.append("file", file);
+  data.append("upload_preset", CLOUDINARY_PRESET);
+  const res = await fetch(CLOUDINARY_URL, {
+    method: "POST",
+    body: data,
+  });
+  const json = await res.json();
+  if (json.secure_url) return json.secure_url;
+  throw new Error("Erreur upload");
+}
+
+// Lancement
 init();
