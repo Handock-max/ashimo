@@ -80,7 +80,7 @@ body {
   font-weight: 600;
   color: #2c3e50;
   user-select: none;
-  font-size: 10px;
+  font-size: 9px;
 }
 
 footer {
@@ -97,7 +97,7 @@ footer {
 /* Responsive */
 @media (min-width: 768px) {
   .dashboard {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   }
 }
 
