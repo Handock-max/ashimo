@@ -47,6 +47,7 @@ body {
   gap: 1rem;
   padding: 2rem;
   flex-grow: 1;
+  font-size: 10px;
 }
 
 .card {
@@ -54,7 +55,7 @@ body {
   border-radius: 10px;
   text-align: center;
   padding: 2rem 1rem;
-  font-size: 20px;
+  font-size: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.2s;
@@ -79,7 +80,7 @@ body {
   font-weight: 600;
   color: #2c3e50;
   user-select: none;
-  font-size: 20px;
+  font-size: 10px;
 }
 
 footer {
