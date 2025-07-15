@@ -278,7 +278,7 @@ async function handleFormSubmit(e) {
   }
 
   try {
-    const res = await fetch(APP_SCRIPT_URL, {
+    const res = await fetch(ADD_MAISON_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
