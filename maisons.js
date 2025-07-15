@@ -122,16 +122,40 @@ cancelDeleteBtn.addEventListener("click", () => {
   loadMaisons();
 }
 
-// --- Chargement des maisons ---
+// --- Chargement des maisons --- (adapté à la réponse N8N)
 async function loadMaisons() {
   try {
     const res = await fetch(APP_SCRIPT_URL);
     const json = await res.json();
 
-    if (json.status !== "ok") {
-      alert("Erreur serveur : " + (json.message || "Erreur inconnue"));
+    if (!Array.isArray(json) || !json.length) {
+      alert("Erreur serveur : réponse inattendue");
       return;
     }
+
+    // Optionnel : vérifier si tous les status sont ok
+    const hasError = json.some(item => item.status !== "ok");
+    if (hasError) {
+      alert("Erreur serveur : une ou plusieurs lignes sont incorrectes");
+      return;
+    }
+
+    // Extraire les maisons et supprimer row_number
+    const allMaisons = json.map(item => {
+      const maison = { ...item.maisons };
+      delete maison.row_number;
+      return maison;
+    });
+
+    maisonsData = allMaisons;
+    currentPage = 1;
+    filteredMaisons = filterMaisons();
+    renderMaisons();
+  } catch (e) {
+    alert("Erreur réseau : " + e.message);
+  }
+}
+
 
     maisonsData = json.maisons || [];
     currentPage = 1;
