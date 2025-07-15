@@ -122,16 +122,16 @@ cancelDeleteBtn.addEventListener("click", () => {
   loadMaisons();
 }
 
-// --- Chargement des maisons --- (adapté à la réponse N8N)
+// --- Chargement des maisons --- (adapté à la réponse N8N) 
+// --- Chargement des maisons --- (réponse N8N = tableau direct)
 async function loadMaisons() {
   try {
     const res = await fetch(APP_SCRIPT_URL);
     const json = await res.json();
 
-    // Suppression de la vérification du statut "ok"
-    // On suppose la réponse correcte et formatée comme attendu
+    // La réponse est directement un tableau de maisons
+    maisonsData = Array.isArray(json) ? json : [];
 
-    maisonsData = json[0].maisons || []; // Adapté à la réponse N8N avec enveloppe tableau
     currentPage = 1;
     filteredMaisons = filterMaisons();
     renderMaisons();
@@ -139,6 +139,8 @@ async function loadMaisons() {
     alert("Erreur réseau : " + e.message);
   }
 }
+
+
 
 // --- Filtrer maisons selon statut ---
 function filterMaisons() {
