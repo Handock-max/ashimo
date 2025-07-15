@@ -157,15 +157,6 @@ async function loadMaisons() {
 }
 
 
-    maisonsData = json.maisons || [];
-    currentPage = 1;
-    filteredMaisons = filterMaisons();
-    renderMaisons();
-  } catch (e) {
-    alert("Erreur réseau : " + e.message);
-  }
-}
-
 // --- Filtrer maisons selon statut ---
 function filterMaisons() {
   const filterValue = statusFilter.value;
