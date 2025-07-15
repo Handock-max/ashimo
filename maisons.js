@@ -5,7 +5,7 @@ const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/drqyicfcb/image/upload";
 const CLOUDINARY_PRESET = "ashimo_unsigned";
 const ADD_MAISON_URL = "https://.../add-maison"; // ton webhook N8N POST
 const EDIT_MAISON_URL = "https://.../edit-maison";
-const DELETE_MAISON_URL = "https://ash-automation.onrender.com/webhook-test/supprimer-maison";
+const DELETE_MAISON_URL = "https://ash-automation.onrender.com/webhook/supprimer-maison";
 
 const maisonsList = document.getElementById("maisonsList");
 const statusFilter = document.getElementById("statusFilter");
