@@ -323,6 +323,8 @@ async function handleConfirmDelete() {
       },
       body: JSON.stringify({
         ID_Maison: maisonToDelete.ID_Maison,
+        businessName: nomAttendu,
+        mode: "delete",
       }),
     });
 
