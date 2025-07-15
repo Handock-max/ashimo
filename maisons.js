@@ -1,4 +1,4 @@
-const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0jRWG5PSz0qAyNpI6iMsvPg5XnDFIOEjR1RuIOSOUby_5NVz4dzJwJpZ6u2iVPbxxTA/exec";
+const APP_SCRIPT_URL = "https://ash-automation.onrender.com/webhook/29250319-0f2f-4b2a-b88b-91f6052cd65d";
 const BUSINESS_NAME_STORAGE_KEY = "business";
 const DEFAULT_IMAGE = "maison-defaut.jpg";
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/drqyicfcb/image/upload"; // cloud_name = drqyicfcb
