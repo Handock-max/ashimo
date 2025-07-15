@@ -3,7 +3,7 @@ const BUSINESS_NAME_STORAGE_KEY = "business";
 const DEFAULT_IMAGE = "maison-defaut.jpg";
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/drqyicfcb/image/upload"; // cloud_name = drqyicfcb
 const CLOUDINARY_PRESET = "ashimo_unsigned";
-const ADD_MAISON_URL = "https://.../add-maison"; // ton webhook N8N POST
+const ADD_MAISON_URL = "https://ash-automation.onrender.com/webhook/ajouter-maison"; // ton webhook N8N POST
 const EDIT_MAISON_URL = "https://.../edit-maison";
 const DELETE_MAISON_URL = "https://ash-automation.onrender.com/webhook/supprimer-maison";
 
