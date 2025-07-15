@@ -3,6 +3,9 @@ const BUSINESS_NAME_STORAGE_KEY = "business";
 const DEFAULT_IMAGE = "maison-defaut.jpg";
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/drqyicfcb/image/upload"; // cloud_name = drqyicfcb
 const CLOUDINARY_PRESET = "ashimo_unsigned";
+const ADD_MAISON_URL = "https://.../add-maison"; // ton webhook N8N POST
+const EDIT_MAISON_URL = "https://.../edit-maison";
+const DELETE_MAISON_URL = "https://ash-automation.onrender.com/webhook/38b9947a-5331-42ac-9e72-7f79c6062da5";
 
 const maisonsList = document.getElementById("maisonsList");
 const statusFilter = document.getElementById("statusFilter");
@@ -312,7 +315,7 @@ async function handleConfirmDelete() {
   }
 
   try {
-    const res = await fetch(APP_SCRIPT_URL, {
+    const res = await fetch(DELETE_MAISON_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
