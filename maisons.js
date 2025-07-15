@@ -128,27 +128,13 @@ async function loadMaisons() {
     const res = await fetch(APP_SCRIPT_URL);
     const json = await res.json();
 
-    // Vérifie que json est un tableau avec au moins un élément
-    if (!Array.isArray(json) || json.length === 0) {
-      alert("Erreur serveur : réponse vide ou non conforme");
-      return;
-    }
+    // Suppression de la vérification du statut "ok"
+    // On suppose la réponse correcte et formatée comme attendu
 
-    // Récupère la liste des maisons dans le premier objet du tableau
-    const firstResponse = json[0];
-
-    if (firstResponse.status !== "ok" || !Array.isArray(firstResponse.maisons)) {
-      alert("Erreur serveur : données maisons invalides");
-      return;
-    }
-
-    // Mets à jour ta variable maisonsData avec la liste des maisons
-    maisonsData = firstResponse.maisons;
-
+    maisonsData = json[0].maisons || []; // Adapté à la réponse N8N avec enveloppe tableau
     currentPage = 1;
     filteredMaisons = filterMaisons();
     renderMaisons();
-
   } catch (e) {
     alert("Erreur réseau : " + e.message);
   }
