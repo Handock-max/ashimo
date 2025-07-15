@@ -128,34 +128,31 @@ async function loadMaisons() {
     const res = await fetch(APP_SCRIPT_URL);
     const json = await res.json();
 
-    if (!Array.isArray(json) || !json.length) {
-      alert("Erreur serveur : réponse inattendue");
+    // Vérifie que json est un tableau avec au moins un élément
+    if (!Array.isArray(json) || json.length === 0) {
+      alert("Erreur serveur : réponse vide ou non conforme");
       return;
     }
 
-    // Optionnel : vérifier si tous les status sont ok
-    const hasError = json.some(item => item.status !== "ok");
-    if (hasError) {
-      alert("Erreur serveur : une ou plusieurs lignes sont incorrectes");
+    // Récupère la liste des maisons dans le premier objet du tableau
+    const firstResponse = json[0];
+
+    if (firstResponse.status !== "ok" || !Array.isArray(firstResponse.maisons)) {
+      alert("Erreur serveur : données maisons invalides");
       return;
     }
 
-    // Extraire les maisons et supprimer row_number
-    const allMaisons = json.map(item => {
-      const maison = { ...item.maisons };
-      delete maison.row_number;
-      return maison;
-    });
+    // Mets à jour ta variable maisonsData avec la liste des maisons
+    maisonsData = firstResponse.maisons;
 
-    maisonsData = allMaisons;
     currentPage = 1;
     filteredMaisons = filterMaisons();
     renderMaisons();
+
   } catch (e) {
     alert("Erreur réseau : " + e.message);
   }
 }
-
 
 // --- Filtrer maisons selon statut ---
 function filterMaisons() {
