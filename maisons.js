@@ -191,7 +191,16 @@ function renderMaisons() {
         </div>
       </div>
     `;
-
+    // Ajout d'un événement pour l'image
+    // Si l'image est cliquable, redirige vers la page des appartements
+    const image = card.querySelector(".maison-img");
+    if (image) {
+      image.style.cursor = "pointer";
+      image.addEventListener("click", () => {
+        const idMaison = maison.ID_Maison;
+        window.location.href = `apparts.html?maison=${encodeURIComponent(idMaison)}`;
+      });
+    }
     // Événements boutons
     card.querySelector(".edit-btn").addEventListener("click", () => {
       currentEditId = maison.ID_Maison;
