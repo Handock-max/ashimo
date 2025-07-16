@@ -1,49 +1,94 @@
+<!-- apparts.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Appartements - Ashimo</title>
-  <link rel="stylesheet" href="apparts.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Appartements</title>
+  <link rel="stylesheet" href="apparts.css" />
 </head>
 <body>
   <header>
-    <button id="backBtn" class="back-btn">← Retour</button>
-    <h1 id="businessTitle"></h1>
-    <button id="logoutBtn" class="logout-btn">Déconnexion</button>
+    <h1 id="appartTitle">Appartements de la maison</h1>
+    <button id="backBtn">Retour</button>
   </header>
 
-  <main>
-    <!-- Filtre -->
-    <div id="toolbar">
-      <label for="statusFilter">Filtrer les apparts :</label>
-      <select id="statusFilter">
-        <option value="">Tous</option>
-        <option value="Libre">Libre</option>
-        <option value="Occupé">Occupé</option>
-      </select>
-    </div>
+  <section id="filterSection">
+    <select id="statusFilter">
+      <option value="">Tous les statuts</option>
+      <option value="Libre">Libre</option>
+      <option value="Occupé">Occupé</option>
+    </select>
+    <button id="addAppartBtn">Ajouter un appartement</button>
+  </section>
 
-    <!-- Grille des appartements -->
-    <section id="appartsList"></section>
-  </main>
+  <section id="appartsList" class="grid-container">
+    <!-- Cartes des appartements injectées ici -->
+  </section>
 
-  <!-- Modal détail appartement -->
-  <div id="appartModal" class="modal hidden">
+  <!-- Fenêtre modale de détails -->
+  <div id="detailsModal" class="modal hidden">
     <div class="modal-content">
-      <button id="modalClose" class="close-btn">✕</button>
-      <h2 id="modalTitle">Appartement #</h2>
-      <div id="modalBody">
-        <!-- Exemple d’infos -->
-        <p><strong>Adresse :</strong> <span id="modalAdresse"></span></p>
-        <p><strong>Étage :</strong> <span id="modalEtage"></span></p>
-        <p><strong>Garage :</strong> <span id="modalGarage"></span></p>
-        <p><strong>Statut :</strong> <span id="modalStatut"></span></p>
-      </div>
+      <span class="close-btn" id="detailsCloseBtn">&times;</span>
+      <h2>Détails de l'appartement</h2>
+      <div id="appartDetails"></div>
       <div class="modal-actions">
-        <button id="editAppart" class="edit-btn">Modifier</button>
-        <button id="deleteAppart" class="delete-btn">Supprimer</button>
+        <button id="editAppartBtn">Modifier</button>
+        <button id="deleteAppartBtn">Supprimer</button>
       </div>
+    </div>
+  </div>
+
+  <!-- Fenêtre modale de formulaire d'ajout/modification -->
+  <div id="formModal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-btn" id="formCloseBtn">&times;</span>
+      <h2 id="formTitle">Ajouter un appartement</h2>
+      <form id="appartForm">
+        <input type="hidden" name="ID_Appart" />
+        <input type="hidden" name="ID_Maison" />
+
+        <label>
+          Étage *
+          <select name="Étage" required id="etageSelect">
+            <option value="" disabled selected>Choisissez l'étage</option>
+          </select>
+        </label>
+
+        <label>
+          Type *
+          <input type="text" name="Type" required />
+        </label>
+
+        <label>
+          Prix mensuel
+          <input type="number" name="Prix_mensuel" />
+        </label>
+
+        <label>
+          Garage *
+          <select name="Garage" required>
+            <option value="" disabled selected>Garage ?</option>
+            <option value="Oui">Oui</option>
+            <option value="Non">Non</option>
+          </select>
+        </label>
+
+        <label>
+          Spécificité
+          <textarea name="Spécificité"></textarea>
+        </label>
+
+        <label>
+          Photos
+          <input type="file" name="Photos" accept="image/*" />
+        </label>
+
+        <div class="form-actions">
+          <button type="submit">Enregistrer</button>
+          <button type="button" id="cancelBtn">Annuler</button>
+        </div>
+      </form>
     </div>
   </div>
 

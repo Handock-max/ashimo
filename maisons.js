@@ -199,6 +199,8 @@ function renderMaisons() {
       image.style.cursor = "pointer";
       image.addEventListener("click", () => {
         sessionStorage.setItem("currentMaisonId", maison.ID_Maison); // ⬅️ Stockage de l'ID maison
+        sessionStorage.setItem("currentMaisonName", maison.Nom_Maison); // ⬅️ Stockage du nom de la maison
+        // Redirection vers la page des appartements
         window.location.href = "apparts.html";
       });
     }
