@@ -1,10 +1,10 @@
-const APP_SCRIPT_URL = "https://ash-automation.onrender.com/webhook/29250319-0f2f-4b2a-b88b-91f6052cd65d";
+const LOAD_MAISON_URL = "https://ash-automation.onrender.com/webhook/charger-maisons";
 const BUSINESS_NAME_STORAGE_KEY = "business";
 const DEFAULT_IMAGE = "maison-defaut.jpg";
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/drqyicfcb/image/upload"; // cloud_name = drqyicfcb
 const CLOUDINARY_PRESET = "ashimo_unsigned";
 const ADD_MAISON_URL = "https://ash-automation.onrender.com/webhook/ajouter-maison"; // ton webhook N8N POST
-const EDIT_MAISON_URL = "https://.../edit-maison";
+const EDIT_MAISON_URL = "https://ash-automation.onrender.com/webhook/modifier-maison";
 const DELETE_MAISON_URL = "https://ash-automation.onrender.com/webhook/supprimer-maison";
 
 const maisonsList = document.getElementById("maisonsList");
@@ -129,7 +129,7 @@ cancelDeleteBtn.addEventListener("click", () => {
 // --- Chargement des maisons --- (réponse N8N = tableau direct)
 async function loadMaisons() {
   try {
-    const res = await fetch(APP_SCRIPT_URL);
+    const res = await fetch(LOAD_MAISON_URL);
     const json = await res.json();
 
     // La réponse est directement un tableau de maisons
@@ -237,13 +237,14 @@ function hideFormModal() {
 }
 
 // --- Gestion formulaire Ajout / Modification ---
+
 async function handleFormSubmit(e) {
   e.preventDefault();
 
   const formData = new FormData(maisonForm);
   const payload = {};
 
-  // Récupère toutes les valeurs sauf la photo (upload spécial)
+  // Récupère toutes les valeurs sauf la photo
   for (const [key, value] of formData.entries()) {
     if (key !== "Photo") {
       payload[key] = value.trim();
@@ -257,12 +258,20 @@ async function handleFormSubmit(e) {
     return;
   }
 
+  // Ajoute le nom du business
   payload.businessName = businessName;
-  payload.mode = currentEditId ? "edit" : "add";
 
-  if (currentEditId) payload.ID_Maison = currentEditId;
+  // Détermine le mode (ajout ou modification)
+  if (currentEditId) {
+    payload.mode = "edit";
+    payload.ID_Maison = currentEditId;
+  } else {
+    payload.mode = "add";
+  }
 
+  // Traitement de la photo
   const imageFile = formData.get("Photo");
+
   if (imageFile && imageFile.name) {
     try {
       const imageUrl = await uploadToCloudinary(imageFile);
@@ -272,21 +281,29 @@ async function handleFormSubmit(e) {
       return;
     }
   } else if (currentEditId) {
-    // Ne pas modifier la photo si aucune nouvelle fournie en modification
+    // Pas de nouvelle image, ne rien modifier
+    delete payload.Photo;
   } else {
-    payload.Photo = ""; // Optionnel, ou mettre image par défaut côté front
+    payload.Photo = ""; // Pour création, image vide si non fournie
   }
 
+  // Envoi de la requête
   try {
-    const res = await fetch(ADD_MAISON_URL, {
+    const url = currentEditId ? EDIT_MAISON_URL : ADD_MAISON_URL;
+
+    const res = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
       body: JSON.stringify(payload),
     });
+
     const result = await res.json();
 
     if (result.status === "success") {
-      alert("Maison enregistrée avec succès");
+      alert(result.message || "Maison enregistrée avec succès");
       maisonForm.reset();
       hideFormModal();
       loadMaisons();
@@ -297,6 +314,7 @@ async function handleFormSubmit(e) {
     alert("Erreur réseau : " + e.message);
   }
 }
+
 
 // --- Confirmation suppression ---
 async function handleConfirmDelete() {
