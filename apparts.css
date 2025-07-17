@@ -10,7 +10,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #34495e;
+  background-color: #34495e; /* Match maisons.html header color */
   color: white;
   padding: 10px 20px;
 }
@@ -23,6 +23,30 @@ header {
 .header-center {
   flex: 1 1 auto;
   text-align: center;
+}
+
+header h1#Maison-name {
+  font-weight: 600;
+  font-size: 1.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60vw;
+}
+
+#backBtn, #logoutBtn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 1.4rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+#backBtn:hover, #logoutBtn:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
 
 #appartToolbar {
@@ -200,4 +224,31 @@ form textarea {
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+#editModal .modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+#editModal .form-actions button {
+  background-color: #27ae60;
+}
+
+#editModal .form-actions button:hover {
+  background-color: #2ecc71;
+}
+
+.modal-actions button#btnFermer {
+  background-color: #e74c3c;
+}
+
+.modal-actions button#btnFermer:hover {
+  background-color: #c0392b;
 }

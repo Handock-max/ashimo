@@ -1,9 +1,9 @@
 /* === Reset & Base === */
 * {
   box-sizing: border-box;
-  margin: 0; padding: 0;
+  margin: 0;
+  padding: 0;
   font-family: 'Roboto', sans-serif;
-}
 
 body {
   background: #f5f5f5;
@@ -19,35 +19,21 @@ body {
 /* Header */
 header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  background-color: #1976d2;
-  padding: 0.8rem 1.2rem;
+  align-items: center;
+  background-color: #34495e;
   color: white;
-  box-shadow: 0 2px 6px rgba(25, 118, 210, 0.7);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  padding: 10px 20px;
 }
 
 .header-left,
-.header-center,
 .header-right {
-  display: flex;
-  align-items: center;
-  flex: 1;
+  flex: 0 0 auto;
 }
 
 .header-center {
-  justify-content: center;
-}
-
-.header-left {
-  justify-content: flex-start;
-}
-
-.header-right {
-  justify-content: flex-end;
+  flex: 1 1 auto;
+  text-align: center;
 }
 
 header h1#businessTitle {
@@ -60,7 +46,7 @@ header h1#businessTitle {
 }
 
 #backBtn, #logoutBtn {
-  background: rgba(255 255 255 / 0.2);
+  background: rgba(255, 255, 255, 0.2);
   border: none;
   color: white;
   font-size: 1.4rem;
@@ -71,7 +57,7 @@ header h1#businessTitle {
 }
 
 #backBtn:hover, #logoutBtn:hover {
-  background: rgba(255 255 255 / 0.4);
+  background: rgba(255, 255, 255, 0.4);
 }
 
 /* Toolbar */
@@ -86,7 +72,6 @@ header h1#businessTitle {
   align-items: center;
   gap: 1rem;
   box-shadow: 0 2px 6px rgba(25, 118, 210, 0.15);
-  user-select: none;
 }
 
 #filterSection label {
@@ -94,7 +79,6 @@ header h1#businessTitle {
   margin-right: 0.5rem;
   color: #1976d2;
   font-size: 1rem;
-  user-select: text;
 }
 
 #statusFilter {
@@ -135,13 +119,15 @@ header h1#businessTitle {
 /* Modal commun */
 .modal {
   position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-color: rgba(33, 33, 33, 0.75);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  user-select: text;
 }
 
 .modal.hidden {
@@ -154,13 +140,12 @@ header h1#businessTitle {
   padding: 1.5rem 2rem;
   max-width: 500px;
   width: 90%;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
   gap: 1rem;
   max-height: 90vh;
   overflow-y: auto;
-  user-select: none;
 }
 
 /* Form modal specific */
@@ -223,12 +208,10 @@ header h1#businessTitle {
   color: white;
 }
 
-
 /* Form modal header */
 .modal-header {
   display: flex;
-  position: relative; /* ou supprimer complètement cette ligne */
-  background: #0d6efd; /* ou ta couleur */
+  background: #0d6efd;
   padding: 1rem;
   color: white;
   font-size: 1.25rem;
@@ -249,7 +232,6 @@ header h1#businessTitle {
   cursor: pointer;
   color: #1976d2;
   padding: 0;
-  user-select: none;
 }
 
 #formCloseBtn:hover {
@@ -263,23 +245,21 @@ header h1#businessTitle {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
-  user-select: text;
 }
 
 /* Carte maison */
 .maison-card {
   background: white;
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: box-shadow 0.3s ease;
-  user-select: none;
 }
 
 .maison-card:hover {
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* Image: avec fond sombre */
@@ -314,7 +294,6 @@ header h1#businessTitle {
   font-size: 0.95rem;
   color: #424242;
   margin-bottom: 0.5rem;
-  user-select: text;
 }
 
 .maison-content .info-row {
@@ -323,7 +302,6 @@ header h1#businessTitle {
   font-weight: 600;
   margin-bottom: 0.25rem;
   color: #616161;
-  user-select: text;
 }
 
 /* Boutons modifier / supprimer */
@@ -344,7 +322,6 @@ header h1#businessTitle {
   font-size: 0.9rem;
   font-weight: 600;
   transition: background-color 0.25s ease;
-  user-select: none;
 }
 
 .card-actions button:hover {
@@ -366,7 +343,6 @@ header h1#businessTitle {
   align-items: center;
   gap: 1rem;
   margin-bottom: 2rem;
-  user-select: none;
 }
 
 #pagination.hidden {
@@ -397,7 +373,6 @@ header h1#businessTitle {
 #pageIndicator {
   font-weight: 600;
   color: #1976d2;
-  user-select: text;
 }
 
 /* Modal suppression */
@@ -409,7 +384,6 @@ header h1#businessTitle {
 #deleteModal h3 {
   color: #d32f2f;
   margin-bottom: 1rem;
-  user-select: text;
 }
 
 #confirmBusiness {
@@ -433,7 +407,6 @@ header h1#businessTitle {
   font-weight: 600;
   cursor: pointer;
   border: none;
-  user-select: none;
   font-size: 1rem;
 }
 
@@ -487,3 +460,4 @@ header h1#businessTitle {
     margin: 1rem;
   }
 }
+  }

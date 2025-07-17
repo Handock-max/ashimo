@@ -32,67 +32,67 @@
             </select>
         </div>
         <div id="addAppartBtn">
-            <button title="Ajouter un appartement" aria-label="Ajouter un appartement">
-            <span>+</span>
+            <button id="addAppartButton" title="Ajouter un appartement" aria-label="Ajouter un appartement">
+                <span>+</span>
             </button>
         </div>
         </div>
 
-        <section id="appartsList" class="grid-container">
+        <section id="appartGrid" class="grid-container">
             <!-- Cartes des appartements injectées ici -->
         </section>
 
         <!-- Fenêtre modale de détails -->
         <div id="detailsModal" class="modal hidden">
             <div class="modal-content">
-            <span class="close-btn" id="detailsCloseBtn">&times;</span>
-            <h2>Détails de l'appartement</h2>
-            <div id="appartDetails"></div>
-            <div class="modal-actions">
-                <button id="editAppartBtn">Modifier</button>
-                <button id="deleteAppartBtn">Supprimer</button>
-            </div>
-            </div>
+        <span class="close-btn" id="closeDetailsModal">&times;</span>
+        <h2 class="modal-title">Détails de l'appartement</h2>
+        <div class="modal-body"></div>
+        <div class="modal-actions">
+            <button id="btnModifier">Modifier</button>
+            <button id="btnSupprimer">Supprimer</button>
+            <button id="btnFermer">Fermer</button>
+        </div>
+    </div>
         </div>
 
         <!-- Fenêtre modale de formulaire d'ajout/modification -->
-        <div id="formModal" class="modal hidden">
+        <div id="editModal" class="modal hidden">
             <div class="modal-content">
-            <span class="close-btn" id="formCloseBtn">&times;</span>
-            <h2 id="formTitle">Ajouter un appartement</h2>
-            <form id="appartForm">
-                <input type="hidden" name="ID_Appart" />
-                <input type="hidden" name="ID_Maison" />
-
-                <label>
-                Étage *
-                <select name="Étage" required id="etageSelect">
-                    <option value="" disabled selected>Choisissez l'étage</option>
+        <span class="close-btn" id="closeEditModal">&times;</span>
+        <h2>Modifier un appartement</h2>
+        <form id="editForm">
+            <input type="hidden" id="editID" />
+            <label>
+                Nom
+                <input type="text" id="editNom" required />
+            </label>
+            <label>
+                Statut
+                <select id="editStatut" required>
+                    <option value="Libre">Libre</option>
+                    <option value="Occupé">Occupé</option>
                 </select>
-                </label>
-
-                <label>
-                Type *
-                <input type="text" name="Type" required />
-                </label>
-
-                <label>
-                Prix mensuel
-                <input type="number" name="Prix_mensuel" />
-                </label>
-
-                <label>
-                Garage *
-                <select name="Garage" required>
-                    <option value="" disabled selected>Garage ?</option>
-                    <option value="Oui">Oui</option>
-                    <option value="Non">Non</option>
-                </select>
-                </label>
-
-                <label>
-                Spécificité
-                <textarea name="Spécificité"></textarea>
+            </label>
+            <label>
+                Prix
+                <input type="number" id="editPrix" />
+            </label>
+            <label>
+                Description
+                <textarea id="editDescription"></textarea>
+            </label>
+            <div class="form-actions">
+                <button type="button" id="btnEnregistrer">Enregistrer</button>
+                <button type="button" id="cancelEditBtn">Annuler</button>
+            </div>
+        </form>
+    </div>
+        </div>
+</main>
+  <script src="apparts.js"></script>
+</body>
+</html>
                 </label>
 
                 <label>
