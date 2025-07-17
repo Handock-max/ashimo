@@ -25,20 +25,61 @@ header {
   text-align: center;
 }
 
-#filterSection {
+#appartToolbar {
+  margin: 1rem auto;
+  max-width: 1000px;
+  background-color: #e3f2fd;
+  padding: 0.8rem 1.5rem;
+  border-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #ecf0f1;
-  padding: 10px 20px;
-  border-bottom: 1px solid #ccc;
+  gap: 1rem;
+  box-shadow: 0 2px 6px rgba(25, 118, 210, 0.15);
+  user-select: none;
 }
 
-#filterSection select,
-#filterSection button {
-  padding: 8px;
+#appartFilterSection label {
+  font-weight: 500;
+  margin-right: 0.5rem;
+  color: #1976d2;
   font-size: 1rem;
-  margin-right: 10px;
+  user-select: text;
+}
+
+#appartStatusFilter {
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #1976d2;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+
+#appartStatusFilter:focus {
+  outline: none;
+  box-shadow: 0 0 5px #1976d2aa;
+}
+
+#addAppartBtn button {
+  background-color: #1976d2;
+  border: none;
+  color: white;
+  font-size: 2.4rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 5px 12px rgba(25, 118, 210, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#addAppartBtn button:hover {
+  background-color: #1565c0;
+  box-shadow: 0 8px 20px rgba(21, 101, 192, 0.6);
 }
 
 .grid-container {

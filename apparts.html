@@ -9,89 +9,105 @@
 </head>
 <body>
   <header>
-    <h1 id="appartTitle">Appartements de la maison</h1>
-    <button id="backBtn">Retour</button>
+    <div class="header-left">
+    <button id="backBtn" aria-label="Retour" title="Retour">Retour</button>
+    </div>
+    <div class="header-center">
+        <h1 id="Maison-name"></h1>
+    </div>
+    <div class="header-right">
+        <button id="logoutBtn" title="Déconnexion">Déconnexion</button>
+    </div>
   </header>
 
-  <section id="filterSection">
-    <select id="statusFilter">
-      <option value="">Tous les statuts</option>
-      <option value="Libre">Libre</option>
-      <option value="Occupé">Occupé</option>
-    </select>
-    <button id="addAppartBtn">Ajouter un appartement</button>
-  </section>
-
-  <section id="appartsList" class="grid-container">
-    <!-- Cartes des appartements injectées ici -->
-  </section>
-
-  <!-- Fenêtre modale de détails -->
-  <div id="detailsModal" class="modal hidden">
-    <div class="modal-content">
-      <span class="close-btn" id="detailsCloseBtn">&times;</span>
-      <h2>Détails de l'appartement</h2>
-      <div id="appartDetails"></div>
-      <div class="modal-actions">
-        <button id="editAppartBtn">Modifier</button>
-        <button id="deleteAppartBtn">Supprimer</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Fenêtre modale de formulaire d'ajout/modification -->
-  <div id="formModal" class="modal hidden">
-    <div class="modal-content">
-      <span class="close-btn" id="formCloseBtn">&times;</span>
-      <h2 id="formTitle">Ajouter un appartement</h2>
-      <form id="appartForm">
-        <input type="hidden" name="ID_Appart" />
-        <input type="hidden" name="ID_Maison" />
-
-        <label>
-          Étage *
-          <select name="Étage" required id="etageSelect">
-            <option value="" disabled selected>Choisissez l'étage</option>
-          </select>
-        </label>
-
-        <label>
-          Type *
-          <input type="text" name="Type" required />
-        </label>
-
-        <label>
-          Prix mensuel
-          <input type="number" name="Prix_mensuel" />
-        </label>
-
-        <label>
-          Garage *
-          <select name="Garage" required>
-            <option value="" disabled selected>Garage ?</option>
-            <option value="Oui">Oui</option>
-            <option value="Non">Non</option>
-          </select>
-        </label>
-
-        <label>
-          Spécificité
-          <textarea name="Spécificité"></textarea>
-        </label>
-
-        <label>
-          Photos
-          <input type="file" name="Photos" accept="image/*" />
-        </label>
-
-        <div class="form-actions">
-          <button type="submit">Enregistrer</button>
-          <button type="button" id="cancelBtn">Annuler</button>
+  <main>
+        <!-- Toolbar Appartements -->
+        <div id="appartToolbar">
+        <div id="appartFilterSection">
+            <label for="appartStatusFilter">Filtrer les appartements :</label>
+            <select id="appartStatusFilter" name="appartStatusFilter">
+            <option value="">Tous</option>
+            <option value="Libre">Libre</option>
+            <option value="Occupé">Occupé</option>
+            </select>
         </div>
-      </form>
-    </div>
-  </div>
+        <div id="addAppartBtn">
+            <button title="Ajouter un appartement" aria-label="Ajouter un appartement">
+            <span>+</span>
+            </button>
+        </div>
+        </div>
 
+        <section id="appartsList" class="grid-container">
+            <!-- Cartes des appartements injectées ici -->
+        </section>
+
+        <!-- Fenêtre modale de détails -->
+        <div id="detailsModal" class="modal hidden">
+            <div class="modal-content">
+            <span class="close-btn" id="detailsCloseBtn">&times;</span>
+            <h2>Détails de l'appartement</h2>
+            <div id="appartDetails"></div>
+            <div class="modal-actions">
+                <button id="editAppartBtn">Modifier</button>
+                <button id="deleteAppartBtn">Supprimer</button>
+            </div>
+            </div>
+        </div>
+
+        <!-- Fenêtre modale de formulaire d'ajout/modification -->
+        <div id="formModal" class="modal hidden">
+            <div class="modal-content">
+            <span class="close-btn" id="formCloseBtn">&times;</span>
+            <h2 id="formTitle">Ajouter un appartement</h2>
+            <form id="appartForm">
+                <input type="hidden" name="ID_Appart" />
+                <input type="hidden" name="ID_Maison" />
+
+                <label>
+                Étage *
+                <select name="Étage" required id="etageSelect">
+                    <option value="" disabled selected>Choisissez l'étage</option>
+                </select>
+                </label>
+
+                <label>
+                Type *
+                <input type="text" name="Type" required />
+                </label>
+
+                <label>
+                Prix mensuel
+                <input type="number" name="Prix_mensuel" />
+                </label>
+
+                <label>
+                Garage *
+                <select name="Garage" required>
+                    <option value="" disabled selected>Garage ?</option>
+                    <option value="Oui">Oui</option>
+                    <option value="Non">Non</option>
+                </select>
+                </label>
+
+                <label>
+                Spécificité
+                <textarea name="Spécificité"></textarea>
+                </label>
+
+                <label>
+                Photos
+                <input type="file" name="Photos" accept="image/*" />
+                </label>
+
+                <div class="form-actions">
+                <button type="submit">Enregistrer</button>
+                <button type="button" id="cancelBtn">Annuler</button>
+                </div>
+            </form>
+            </div>
+        </div>
+</main>
   <script src="apparts.js"></script>
 </body>
 </html>
