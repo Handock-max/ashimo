@@ -26,10 +26,10 @@ const logoutBtn = document.getElementById("logoutBtn");
 const pageIndicator = document.getElementById("pageIndicator");
 const prevPageBtn = document.getElementById("prevPageBtn");
 const nextPageBtn = document.getElementById("nextPageBtn");
+const cancelEditBtn = document.getElementById("cancelEditBtn");
 
 // 📌 Initialisation
 function init() {
-  // Vérification des données dans sessionStorage
   const businessName = localStorage.getItem("business");
   const token = sessionStorage.getItem("sessionToken");
   const maisonID = sessionStorage.getItem("currentMaisonId");
@@ -38,14 +38,12 @@ function init() {
   if (!businessName || !token || !maisonID || !maisonName) {
     sessionStorage.clear();
     localStorage.clear();
-    window.location.href = "index.html"; // Redirection vers la page de connexion
+    window.location.href = "index.html";
     return;
   }
 
-  // Affichage du nom de la maison dans l'en-tête
   document.getElementById("Maison-name").textContent = maisonName;
 
-  // Configuration des écouteurs d'événements
   logoutBtn.addEventListener("click", handleLogout);
   backBtn.addEventListener("click", () => window.location.href = "maisons.html");
   appartStatusFilter.addEventListener("change", handleFilterChange);
@@ -53,45 +51,73 @@ function init() {
   closeDetailsModal.addEventListener("click", () => closeModal("detailsModal"));
   closeEditModal.addEventListener("click", () => closeModal("editModal"));
   btnEnregistrer.addEventListener("click", saveModifications);
+  cancelEditBtn.addEventListener("click", () => closeModal("editModal"));
   btnFermer.addEventListener("click", () => closeModal("detailsModal"));
-  prevPageBtn.addEventListener("click", handlePrevPage);
-  nextPageBtn.addEventListener("click", handleNextPage);
+  prevPageBtn?.addEventListener("click", handlePrevPage);
+  nextPageBtn?.addEventListener("click", handleNextPage);
 
-  // Chargement initial des appartements
   loadAppartements();
 }
 
-// 📌 Chargement des appartements liés à une maison
+// 📌 Fonction universelle d'enregistrement (ajout ou modification)
+function saveModifications() {
+  const id = document.getElementById("editID").value;
+  const nom = document.getElementById("editNom").value.trim();
+  const statut = document.getElementById("editStatut").value;
+  const prix = document.getElementById("editPrix").value;
+  const description = document.getElementById("editDescription").value;
+  const maisonID = sessionStorage.getItem("currentMaisonId");
+
+  if (!nom) {
+    alert("Le nom est requis.");
+    return;
+  }
+
+  const data = {
+    ID_Appartement: id,
+    Nom_Appartement: nom,
+    Statut: statut,
+    Prix: prix,
+    Description: description,
+    ID_Maison: maisonID
+  };
+
+  if (id) {
+    modifierAppart(data);
+  } else {
+    ajouterAppart(data);
+  }
+
+  closeModal("editModal");
+}
+
+// 📌 Chargement des appartements
 async function loadAppartements() {
   try {
     const maisonID = sessionStorage.getItem("currentMaisonId");
-
-    // Vérifier si AppartArray existe dans le localStorage
     const storedApparts = localStorage.getItem("AppartArray");
+
     if (storedApparts) {
       const appartsArray = JSON.parse(storedApparts);
-      // Filtrer les appartements par ID_Maison
       appartsData = appartsArray.filter(app => app.ID_Maison === maisonID);
       currentPage = 1;
       applyFilterAndRender();
       return;
     }
 
-    // Si AppartArray n'existe pas, effectuer le fetch
     const res = await fetch(`${LOAD_APPARTS_URL}?ID_Maison=${maisonID}`);
     const json = await res.json();
 
-    // Stocker les données dans appartsData et localStorage
     appartsData = Array.isArray(json) ? json : [];
     localStorage.setItem("AppartArray", JSON.stringify(appartsData));
     currentPage = 1;
     applyFilterAndRender();
   } catch (e) {
-    alert("Erreur de chargement des appartements : " + e.message);
+    alert("Erreur de chargement : " + e.message);
   }
 }
 
-// 📌 Appliquer le filtre et rendre les appartements
+// 📌 Appliquer le filtre et afficher
 function applyFilterAndRender() {
   filteredApparts = currentFilter
     ? appartsData.filter(app => app.Statut === currentFilter)
@@ -99,7 +125,7 @@ function applyFilterAndRender() {
   renderApparts();
 }
 
-// 📌 Rendu visuel des cartes appartements
+// 📌 Afficher les cartes d'appartements
 function renderApparts() {
   appartGrid.innerHTML = "";
 
@@ -135,13 +161,12 @@ function renderApparts() {
     appartGrid.appendChild(card);
   });
 
-  // Mise à jour de la pagination
   pageIndicator.textContent = `Page ${currentPage} / ${maxPage}`;
   prevPageBtn.disabled = currentPage <= 1;
   nextPageBtn.disabled = currentPage >= maxPage;
 }
 
-// 📌 Gestion des événements de pagination
+// 📌 Pagination
 function handlePrevPage() {
   if (currentPage > 1) {
     currentPage--;
@@ -157,14 +182,14 @@ function handleNextPage() {
   }
 }
 
-// 📌 Gestion du filtre
+// 📌 Changement de filtre
 function handleFilterChange() {
   currentFilter = appartStatusFilter.value;
   currentPage = 1;
   applyFilterAndRender();
 }
 
-// 📌 Supprimer un appartement
+// 📌 Supprimer
 async function supprimerAppart(idAppart) {
   try {
     const res = await fetch(DELETE_APPART_URL, {
@@ -174,19 +199,18 @@ async function supprimerAppart(idAppart) {
     });
 
     if (res.ok) {
-      // Supprimer AppartArray du localStorage
       localStorage.removeItem("AppartArray");
-      alert("Appartement supprimé avec succès.");
-      init(); // Réinitialiser l'application
+      alert("Appartement supprimé.");
+      init();
     } else {
-      alert("Erreur lors de la suppression de l'appartement.");
+      alert("Échec de la suppression.");
     }
   } catch (e) {
     alert("Erreur : " + e.message);
   }
 }
 
-// 📌 Ajouter un appartement
+// 📌 Ajouter
 async function ajouterAppart(data) {
   try {
     const res = await fetch(ADD_APPART_URL, {
@@ -196,19 +220,18 @@ async function ajouterAppart(data) {
     });
 
     if (res.ok) {
-      // Supprimer AppartArray du localStorage
       localStorage.removeItem("AppartArray");
-      alert("Appartement ajouté avec succès.");
-      init(); // Réinitialiser l'application
+      alert("Ajout réussi.");
+      init();
     } else {
-      alert("Erreur lors de l'ajout de l'appartement.");
+      alert("Erreur lors de l'ajout.");
     }
   } catch (e) {
     alert("Erreur : " + e.message);
   }
 }
 
-// 📌 Modifier un appartement
+// 📌 Modifier
 async function modifierAppart(data) {
   try {
     const res = await fetch(UPDATE_APPART_URL, {
@@ -218,30 +241,28 @@ async function modifierAppart(data) {
     });
 
     if (res.ok) {
-      // Supprimer AppartArray du localStorage
       localStorage.removeItem("AppartArray");
-      alert("Appartement modifié avec succès.");
-      init(); // Réinitialiser l'application
+      alert("Modification réussie.");
+      init();
     } else {
-      alert("Erreur lors de la modification de l'appartement.");
+      alert("Erreur lors de la modification.");
     }
   } catch (e) {
     alert("Erreur : " + e.message);
   }
 }
 
-// 📌 Ouvrir la modale d'ajout
+// 📌 Ouvrir modal ajout
 function openAddModal() {
-  const modal = document.getElementById("editModal");
   document.getElementById("editForm").reset();
-  modal.style.display = "block";
+  document.getElementById("editID").value = "";
+  editModal.style.display = "block";
 }
 
-// 📌 Affichage de la modale détails
+// 📌 Ouvrir modal détails
 function openDetailsModal(appart) {
-  const modal = document.getElementById("detailsModal");
-  modal.querySelector(".modal-title").textContent = appart.Nom_Appartement;
-  modal.querySelector(".modal-body").innerHTML = `
+  detailsModal.querySelector(".modal-title").textContent = appart.Nom_Appartement;
+  detailsModal.querySelector(".modal-body").innerHTML = `
     <p><strong>Type :</strong> ${appart.Type}</p>
     <p><strong>Statut :</strong> ${appart.Statut}</p>
     <p><strong>Prix :</strong> ${appart.Prix || 'N/A'} FCFA</p>
@@ -250,10 +271,20 @@ function openDetailsModal(appart) {
 
   document.getElementById("btnSupprimer").onclick = () => supprimerAppart(appart.ID_Appartement);
   document.getElementById("btnModifier").onclick = () => openEditModal(appart);
-  modal.style.display = "block";
+  detailsModal.style.display = "block";
 }
 
-// 📌 Masquer une modale
+// 📌 Ouvrir modal édition
+function openEditModal(appart) {
+  document.getElementById("editID").value = appart.ID_Appartement;
+  document.getElementById("editNom").value = appart.Nom_Appartement;
+  document.getElementById("editStatut").value = appart.Statut;
+  document.getElementById("editPrix").value = appart.Prix || "";
+  document.getElementById("editDescription").value = appart.Description || "";
+  editModal.style.display = "block";
+}
+
+// 📌 Fermer un modal
 function closeModal(modalId) {
   document.getElementById(modalId).style.display = "none";
 }
@@ -265,5 +296,5 @@ function handleLogout() {
   window.location.href = "index.html";
 }
 
-// 📌 Lancer l'initialisation
+// 📌 Lancer l'app
 init();

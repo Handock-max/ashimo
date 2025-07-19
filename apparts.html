@@ -10,100 +10,97 @@
 <body>
   <header>
     <div class="header-left">
-    <button id="backBtn" aria-label="Retour" title="Retour">Retour</button>
+      <button id="backBtn" aria-label="Retour" title="Retour">Retour</button>
     </div>
     <div class="header-center">
-        <h1 id="Maison-name"></h1>
+      <h1 id="Maison-name"></h1>
     </div>
     <div class="header-right">
-        <button id="logoutBtn" title="Déconnexion">Déconnexion</button>
+      <button id="logoutBtn" title="Déconnexion">Déconnexion</button>
     </div>
   </header>
 
   <main>
-        <!-- Toolbar Appartements -->
-        <div id="appartToolbar">
-        <div id="appartFilterSection">
-            <label for="appartStatusFilter">Filtrer les appartements :</label>
-            <select id="appartStatusFilter" name="appartStatusFilter">
-            <option value="">Tous</option>
-            <option value="Libre">Libre</option>
-            <option value="Occupé">Occupé</option>
-            </select>
-        </div>
-        <div id="addAppartBtn">
-            <button id="addAppartButton" title="Ajouter un appartement" aria-label="Ajouter un appartement">
-                <span>+</span>
-            </button>
-        </div>
-        </div>
+    <!-- Toolbar Appartements -->
+    <div id="appartToolbar">
+      <div id="appartFilterSection">
+        <label for="appartStatusFilter">Filtrer les appartements :</label>
+        <select id="appartStatusFilter" name="appartStatusFilter">
+          <option value="">Tous</option>
+          <option value="Libre">Libre</option>
+          <option value="Occupé">Occupé</option>
+        </select>
+      </div>
+      <div id="addAppartBtn">
+        <button id="addAppartButton" title="Ajouter un appartement" aria-label="Ajouter un appartement">
+          <span>+</span>
+        </button>
+      </div>
+    </div>
 
-        <section id="appartGrid" class="grid-container">
-            <!-- Cartes des appartements injectées ici -->
-        </section>
+    <section id="appartGrid" class="grid-container">
+      <!-- Cartes des appartements injectées ici -->
+    </section>
 
-        <!-- Fenêtre modale de détails -->
-        <div id="detailsModal" class="modal hidden">
-            <div class="modal-content">
+    <!-- Fenêtre modale de détails -->
+    <div id="detailsModal" class="modal hidden">
+      <div class="modal-content">
         <span class="close-btn" id="closeDetailsModal">&times;</span>
         <h2 class="modal-title">Détails de l'appartement</h2>
         <div class="modal-body"></div>
         <div class="modal-actions">
-            <button id="btnModifier">Modifier</button>
-            <button id="btnSupprimer">Supprimer</button>
-            <button id="btnFermer">Fermer</button>
+          <button id="btnModifier">Modifier</button>
+          <button id="btnSupprimer">Supprimer</button>
+          <button id="btnFermer">Fermer</button>
         </div>
+      </div>
     </div>
-        </div>
 
-        <!-- Fenêtre modale de formulaire d'ajout/modification -->
-        <div id="editModal" class="modal hidden">
-            <div class="modal-content">
+    <!-- Fenêtre modale de formulaire d'ajout/modification -->
+    <div id="editModal" class="modal hidden">
+      <div class="modal-content">
         <span class="close-btn" id="closeEditModal">&times;</span>
-        <h2>Modifier un appartement</h2>
+        <h2>Ajouter / Modifier un appartement</h2>
         <form id="editForm">
-            <input type="hidden" id="editID" />
-            <label>
-                Nom
-                <input type="text" id="editNom" required />
-            </label>
-            <label>
-                Statut
-                <select id="editStatut" required>
-                    <option value="Libre">Libre</option>
-                    <option value="Occupé">Occupé</option>
-                </select>
-            </label>
-            <label>
-                Prix
-                <input type="number" id="editPrix" />
-            </label>
-            <label>
-                Description
-                <textarea id="editDescription"></textarea>
-            </label>
-            <div class="form-actions">
-                <button type="button" id="btnEnregistrer">Enregistrer</button>
-                <button type="button" id="cancelEditBtn">Annuler</button>
-            </div>
+          <input type="hidden" id="editID" />
+          
+          <label>
+            Nom
+            <input type="text" id="editNom" required />
+          </label>
+
+          <label>
+            Statut
+            <select id="editStatut" required>
+              <option value="Libre">Libre</option>
+              <option value="Occupé">Occupé</option>
+            </select>
+          </label>
+
+          <label>
+            Prix
+            <input type="number" id="editPrix" />
+          </label>
+
+          <label>
+            Description
+            <textarea id="editDescription"></textarea>
+          </label>
+
+          <label>
+            Photos
+            <input type="file" name="Photos" accept="image/*" />
+          </label>
+
+          <div class="form-actions">
+            <button type="button" id="btnEnregistrer">Enregistrer</button>
+            <button type="button" id="cancelEditBtn">Annuler</button>
+          </div>
         </form>
+      </div>
     </div>
-        </div>
-                </label>
+  </main>
 
-                <label>
-                Photos
-                <input type="file" name="Photos" accept="image/*" />
-                </label>
-
-                <div class="form-actions">
-                <button type="submit">Enregistrer</button>
-                <button type="button" id="cancelBtn">Annuler</button>
-                </div>
-            </form>
-            </div>
-        </div>
-</main>
   <script src="apparts.js"></script>
 </body>
 </html>
