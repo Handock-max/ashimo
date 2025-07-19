@@ -1,33 +1,82 @@
-// 📌 À PERSONNALISER : URLs des webhooks N8N
-const LOAD_APPARTS_URL = 'https://ash-automation.onrender.com/webhook/charger-apparts';       // GET avec ID_Maison
-const DELETE_APPART_URL = 'TON_URL_N8N_DELETE';    // POST avec ID_Appartement
-const UPDATE_APPART_URL = 'TON_URL_N8N_UPDATE';    // POST avec les champs à modifier
-const maisonID = sessionStorage.getItem("currentMaisonId");
-// 📌 Données
+// 📌 URLs des webhooks N8N
+const LOAD_APPARTS_URL = 'https://ash-automation.onrender.com/webhook/charger-apparts'; // GET avec ID_Maison
+const DELETE_APPART_URL = 'TON_URL_N8N_DELETE'; // POST avec ID_Appartement
+const UPDATE_APPART_URL = 'TON_URL_N8N_UPDATE'; // POST avec les champs à modifier
+
+// 📌 Constantes et variables globales
+const ITEMS_PER_PAGE = 9;
+let currentPage = 1;
 let appartsData = [];
 let filteredApparts = [];
-let currentFilter = [];
+let currentFilter = null;
 
+// 📌 Sélection des éléments DOM
+const appartGrid = document.getElementById("appartGrid");
+const appartStatusFilter = document.getElementById("appartStatusFilter");
+const addAppartButton = document.getElementById("addAppartButton");
+const detailsModal = document.getElementById("detailsModal");
+const editModal = document.getElementById("editModal");
+const closeDetailsModal = document.getElementById("closeDetailsModal");
+const closeEditModal = document.getElementById("closeEditModal");
+const btnEnregistrer = document.getElementById("btnEnregistrer");
+const btnFermer = document.getElementById("btnFermer");
+const backBtn = document.getElementById("backBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+const pageIndicator = document.getElementById("pageIndicator");
+const prevPageBtn = document.getElementById("prevPageBtn");
+const nextPageBtn = document.getElementById("nextPageBtn");
 
+// 📌 Initialisation
+function init() {
+  // Vérification des données dans sessionStorage
+  const businessName = localStorage.getItem("business");
+  const token = sessionStorage.getItem("sessionToken");
+  const maisonID = sessionStorage.getItem("currentMaisonId");
+  const maisonName = sessionStorage.getItem("currentMaisonName");
 
-// 📌 Chargement des appartements liés à une maison (via sessionStorage)
+  if (!businessName || !token || !maisonID || !maisonName) {
+    sessionStorage.clear();
+    localStorage.clear();
+    window.location.href = "index.html"; // Redirection vers la page de connexion
+    return;
+  }
+
+  // Affichage du nom de la maison dans l'en-tête
+  document.getElementById("Maison-name").textContent = maisonName;
+
+  // Configuration des écouteurs d'événements
+  logoutBtn.addEventListener("click", handleLogout);
+  backBtn.addEventListener("click", () => window.location.href = "maisons.html");
+  appartStatusFilter.addEventListener("change", handleFilterChange);
+  addAppartButton.addEventListener("click", openAddModal);
+  closeDetailsModal.addEventListener("click", () => closeModal("detailsModal"));
+  closeEditModal.addEventListener("click", () => closeModal("editModal"));
+  btnEnregistrer.addEventListener("click", saveModifications);
+  btnFermer.addEventListener("click", () => closeModal("detailsModal"));
+  prevPageBtn.addEventListener("click", handlePrevPage);
+  nextPageBtn.addEventListener("click", handleNextPage);
+
+  // Chargement initial des appartements
+  loadAppartements();
+}
+
+// 📌 Chargement des appartements liés à une maison
 async function loadAppartements() {
   try {
-    const res = await fetch(LOAD_APPARTS_URL); // Fetch all apartments
+    const maisonID = sessionStorage.getItem("currentMaisonId");
+    const res = await fetch(`${LOAD_APPARTS_URL}?ID_Maison=${maisonID}`);
     const json = await res.json();
 
-    // Filtrer les appartements par ID_Maison
-    appartsData = Array.isArray(json) 
-      ? json.filter(app => app.ID_Maison === maisonID) 
-      : [];
-
+    // Stockage des données et rendu initial
+    appartsData = Array.isArray(json) ? json : [];
+    currentPage = 1;
     applyFilterAndRender();
   } catch (e) {
     alert("Erreur de chargement des appartements : " + e.message);
   }
 }
 
-// 📌 Appliquer le filtre en fonction du statut
+// 📌 Appliquer le filtre et rendre les appartements
 function applyFilterAndRender() {
   filteredApparts = currentFilter
     ? appartsData.filter(app => app.Statut === currentFilter)
@@ -37,10 +86,21 @@ function applyFilterAndRender() {
 
 // 📌 Rendu visuel des cartes appartements
 function renderApparts() {
-  const container = document.getElementById("appartGrid");
-  container.innerHTML = "";
+  appartGrid.innerHTML = "";
 
-  filteredApparts.forEach((appart) => {
+  if (!filteredApparts.length) {
+    appartGrid.innerHTML = "<p>Aucun appartement à afficher.</p>";
+    return;
+  }
+
+  const maxPage = Math.ceil(filteredApparts.length / ITEMS_PER_PAGE);
+  if (currentPage > maxPage) currentPage = maxPage;
+
+  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIdx = startIdx + ITEMS_PER_PAGE;
+  const pageApparts = filteredApparts.slice(startIdx, endIdx);
+
+  pageApparts.forEach(appart => {
     const card = document.createElement("div");
     card.className = "appart-card";
 
@@ -57,8 +117,43 @@ function renderApparts() {
     `;
 
     card.addEventListener("click", () => openDetailsModal(appart));
-    container.appendChild(card);
+    appartGrid.appendChild(card);
   });
+
+  // Mise à jour de la pagination
+  pageIndicator.textContent = `Page ${currentPage} / ${maxPage}`;
+  prevPageBtn.disabled = currentPage <= 1;
+  nextPageBtn.disabled = currentPage >= maxPage;
+}
+
+// 📌 Gestion des événements de pagination
+function handlePrevPage() {
+  if (currentPage > 1) {
+    currentPage--;
+    renderApparts();
+  }
+}
+
+function handleNextPage() {
+  const maxPage = Math.ceil(filteredApparts.length / ITEMS_PER_PAGE);
+  if (currentPage < maxPage) {
+    currentPage++;
+    renderApparts();
+  }
+}
+
+// 📌 Gestion du filtre
+function handleFilterChange() {
+  currentFilter = appartStatusFilter.value;
+  currentPage = 1;
+  applyFilterAndRender();
+}
+
+// 📌 Ouvrir la modale d'ajout
+function openAddModal() {
+  const modal = document.getElementById("editModal");
+  document.getElementById("editForm").reset();
+  modal.style.display = "block";
 }
 
 // 📌 Affichage de la modale détails
@@ -82,108 +177,12 @@ function closeModal(modalId) {
   document.getElementById(modalId).style.display = "none";
 }
 
-// 📌 Suppression appartement
-async function supprimerAppart(id) {
-  if (!confirm("Confirmer la suppression ?")) return;
-  try {
-    const res = await fetch(DELETE_APPART_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ID_Appartement: id }),
-    });
-    const result = await res.json();
-    if (result.success) {
-      alert("Supprimé avec succès.");
-      closeModal("detailsModal");
-      await loadAppartements();
-    } else {
-      alert("Erreur suppression.");
-    }
-  } catch (e) {
-    alert("Erreur réseau suppression : " + e.message);
-  }
-}
-
-// 📌 Ouvrir modale de modification
-function openEditModal(appart) {
-  closeModal("detailsModal");
-  const modal = document.getElementById("editModal");
-  document.getElementById("editNom").value = appart.Nom_Appartement;
-  document.getElementById("editStatut").value = appart.Statut;
-  document.getElementById("editPrix").value = appart.Prix || '';
-  document.getElementById("editDescription").value = appart.Description || '';
-  document.getElementById("editID").value = appart.ID_Appartement;
-  modal.style.display = "block";
-}
-
-// 📌 Enregistrer modifications
-async function saveModifications() {
-  const id = document.getElementById("editID").value;
-  const data = {
-    ID_Appartement: id,
-    Nom_Appartement: document.getElementById("editNom").value,
-    Statut: document.getElementById("editStatut").value,
-    Prix: document.getElementById("editPrix").value,
-    Description: document.getElementById("editDescription").value,
-  };
-
-  try {
-    const res = await fetch(UPDATE_APPART_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    const result = await res.json();
-    if (result.success) {
-      alert("Modification enregistrée.");
-      closeModal("editModal");
-      await loadAppartements();
-    } else {
-      alert("Erreur lors de la modification.");
-    }
-  } catch (e) {
-    alert("Erreur réseau : " + e.message);
-  }
-}
-
-// 📌 Vérification des données dans sessionStorage
-if (!sessionStorage.getItem("currentMaisonId") || !sessionStorage.getItem("currentMaisonName")) {
+// 📌 Déconnexion
+function handleLogout() {
   sessionStorage.clear();
-  window.location.href = "index.html"; // Redirection forcée vers la page de login
+  localStorage.clear();
+  window.location.href = "index.html";
 }
 
-// 📌 Affichage du nom de la maison dans l'en-tête
-document.getElementById("Maison-name").textContent = sessionStorage.getItem("currentMaisonName");
-
-// 📌 Fonctionnalité du bouton "Retour"
-document.getElementById("backBtn").addEventListener("click", () => {
-  window.location.href = "maisons.html"; // Redirection vers la page maisons.html
-});
-
-// 📌 Fonctionnalité du bouton "Déconnexion"
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  sessionStorage.clear(); // Vider tous les stockages
-  window.location.href = "index.html"; // Redirection vers la page d'accueil
-});
-
-// 📌 Écouteurs
-document.getElementById("filterStatus").addEventListener("change", (e) => {
-  currentFilter = e.target.value;
-  applyFilterAndRender();
-});
-
-document.getElementById("closeDetailsModal").addEventListener("click", () => closeModal("detailsModal"));
-document.getElementById("closeEditModal").addEventListener("click", () => closeModal("editModal"));
-document.getElementById("btnEnregistrer").addEventListener("click", saveModifications);
-document.getElementById("addAppartButton").addEventListener("click", () => {
-  const modal = document.getElementById("editModal");
-  document.getElementById("editForm").reset();
-  modal.style.display = "block";
-});
-document.getElementById("btnFermer").addEventListener("click", () => {
-  closeModal("detailsModal");
-});
-
-// 📌 Chargement initial
-window.addEventListener("DOMContentLoaded", loadAppartements);
-
+// 📌 Lancer l'initialisation
+init();
