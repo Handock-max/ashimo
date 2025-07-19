@@ -177,7 +177,7 @@ async function supprimerAppart(idAppart) {
       // Supprimer AppartArray du localStorage
       localStorage.removeItem("AppartArray");
       alert("Appartement supprimé avec succès.");
-      loadAppartements(); // Recharger les données
+      init(); // Réinitialiser l'application
     } else {
       alert("Erreur lors de la suppression de l'appartement.");
     }
@@ -199,7 +199,7 @@ async function ajouterAppart(data) {
       // Supprimer AppartArray du localStorage
       localStorage.removeItem("AppartArray");
       alert("Appartement ajouté avec succès.");
-      loadAppartements(); // Recharger les données
+      init(); // Réinitialiser l'application
     } else {
       alert("Erreur lors de l'ajout de l'appartement.");
     }
@@ -221,7 +221,7 @@ async function modifierAppart(data) {
       // Supprimer AppartArray du localStorage
       localStorage.removeItem("AppartArray");
       alert("Appartement modifié avec succès.");
-      loadAppartements(); // Recharger les données
+      init(); // Réinitialiser l'application
     } else {
       alert("Erreur lors de la modification de l'appartement.");
     }
