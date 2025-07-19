@@ -106,7 +106,7 @@ async function loadAppartements() {
       return;
     }
 
-    const res = await fetch(`${LOAD_APPARTS_URL}?ID_Maison=${maisonID}`);
+    const res = await fetch(LOAD_APPARTS_URL);
     const json = await res.json();
 
     appartsData = Array.isArray(json) ? json : [];
