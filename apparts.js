@@ -13,12 +13,13 @@ let currentFilter = [];
 // 📌 Chargement des appartements liés à une maison (via sessionStorage)
 async function loadAppartements() {
   try {
-    
-    if (!maisonID) throw new Error("Aucune maison sélectionnée.");
-
-    const res = await fetch(`${LOAD_APPARTS_URL}?ID_Maison=${encodeURIComponent(maisonID)}`);
+    const res = await fetch(LOAD_APPARTS_URL); // Fetch all apartments
     const json = await res.json();
-    appartsData = Array.isArray(json) ? json : [];
+
+    // Filtrer les appartements par ID_Maison
+    appartsData = Array.isArray(json) 
+      ? json.filter(app => app.ID_Maison === maisonID) 
+      : [];
 
     applyFilterAndRender();
   } catch (e) {
