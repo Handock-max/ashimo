@@ -2,6 +2,7 @@
 const LOAD_APPARTS_URL = 'https://ash-automation.onrender.com/webhook/charger-apparts'; // GET avec ID_Maison
 const DELETE_APPART_URL = 'TON_URL_N8N_DELETE'; // POST avec ID_Appartement
 const UPDATE_APPART_URL = 'TON_URL_N8N_UPDATE'; // POST avec les champs à modifier
+const ADD_APPART_URL = 'TON_URL_N8N_ADD'; // POST avec les champs à ajouter
 
 // 📌 Constantes et variables globales
 const ITEMS_PER_PAGE = 9;
@@ -64,11 +65,25 @@ function init() {
 async function loadAppartements() {
   try {
     const maisonID = sessionStorage.getItem("currentMaisonId");
+
+    // Vérifier si AppartArray existe dans le localStorage
+    const storedApparts = localStorage.getItem("AppartArray");
+    if (storedApparts) {
+      const appartsArray = JSON.parse(storedApparts);
+      // Filtrer les appartements par ID_Maison
+      appartsData = appartsArray.filter(app => app.ID_Maison === maisonID);
+      currentPage = 1;
+      applyFilterAndRender();
+      return;
+    }
+
+    // Si AppartArray n'existe pas, effectuer le fetch
     const res = await fetch(`${LOAD_APPARTS_URL}?ID_Maison=${maisonID}`);
     const json = await res.json();
 
-    // Stockage des données et rendu initial
+    // Stocker les données dans appartsData et localStorage
     appartsData = Array.isArray(json) ? json : [];
+    localStorage.setItem("AppartArray", JSON.stringify(appartsData));
     currentPage = 1;
     applyFilterAndRender();
   } catch (e) {
@@ -147,6 +162,72 @@ function handleFilterChange() {
   currentFilter = appartStatusFilter.value;
   currentPage = 1;
   applyFilterAndRender();
+}
+
+// 📌 Supprimer un appartement
+async function supprimerAppart(idAppart) {
+  try {
+    const res = await fetch(DELETE_APPART_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ID_Appartement: idAppart }),
+    });
+
+    if (res.ok) {
+      // Supprimer AppartArray du localStorage
+      localStorage.removeItem("AppartArray");
+      alert("Appartement supprimé avec succès.");
+      loadAppartements(); // Recharger les données
+    } else {
+      alert("Erreur lors de la suppression de l'appartement.");
+    }
+  } catch (e) {
+    alert("Erreur : " + e.message);
+  }
+}
+
+// 📌 Ajouter un appartement
+async function ajouterAppart(data) {
+  try {
+    const res = await fetch(ADD_APPART_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    if (res.ok) {
+      // Supprimer AppartArray du localStorage
+      localStorage.removeItem("AppartArray");
+      alert("Appartement ajouté avec succès.");
+      loadAppartements(); // Recharger les données
+    } else {
+      alert("Erreur lors de l'ajout de l'appartement.");
+    }
+  } catch (e) {
+    alert("Erreur : " + e.message);
+  }
+}
+
+// 📌 Modifier un appartement
+async function modifierAppart(data) {
+  try {
+    const res = await fetch(UPDATE_APPART_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    if (res.ok) {
+      // Supprimer AppartArray du localStorage
+      localStorage.removeItem("AppartArray");
+      alert("Appartement modifié avec succès.");
+      loadAppartements(); // Recharger les données
+    } else {
+      alert("Erreur lors de la modification de l'appartement.");
+    }
+  } catch (e) {
+    alert("Erreur : " + e.message);
+  }
 }
 
 // 📌 Ouvrir la modale d'ajout
