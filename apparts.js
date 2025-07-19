@@ -28,36 +28,6 @@ const prevPageBtn = document.getElementById("prevPageBtn");
 const nextPageBtn = document.getElementById("nextPageBtn");
 const cancelEditBtn = document.getElementById("cancelEditBtn");
 
-// 📌 Initialisation
-function init() {
-  const businessName = localStorage.getItem("business");
-  const token = sessionStorage.getItem("sessionToken");
-  const maisonID = sessionStorage.getItem("currentMaisonId");
-  const maisonName = sessionStorage.getItem("currentMaisonName");
-
-  if (!businessName || !token || !maisonID || !maisonName) {
-    sessionStorage.clear();
-    localStorage.clear();
-    window.location.href = "index.html";
-    return;
-  }
-
-  document.getElementById("Maison-name").textContent = maisonName;
-
-  logoutBtn.addEventListener("click", handleLogout);
-  backBtn.addEventListener("click", () => window.location.href = "maisons.html");
-  appartStatusFilter.addEventListener("change", handleFilterChange);
-  addAppartButton.addEventListener("click", openAddModal);
-  closeDetailsModal.addEventListener("click", () => closeModal("detailsModal"));
-  closeEditModal.addEventListener("click", () => closeModal("editModal"));
-  btnEnregistrer.addEventListener("click", saveModifications);
-  cancelEditBtn.addEventListener("click", () => closeModal("editModal"));
-  btnFermer.addEventListener("click", () => closeModal("detailsModal"));
-  prevPageBtn?.addEventListener("click", handlePrevPage);
-  nextPageBtn?.addEventListener("click", handleNextPage);
-
-  loadAppartements();
-}
 
 // 📌 Fonction universelle d'enregistrement (ajout ou modification)
 function saveModifications() {
@@ -90,6 +60,37 @@ function saveModifications() {
 
   closeModal("editModal");
 }
+// 📌 Initialisation
+function init() {
+  const businessName = localStorage.getItem("business");
+  const token = sessionStorage.getItem("sessionToken");
+  const maisonID = sessionStorage.getItem("currentMaisonId");
+  const maisonName = sessionStorage.getItem("currentMaisonName");
+
+  if (!businessName || !token || !maisonID || !maisonName) {
+    sessionStorage.clear();
+    localStorage.clear();
+    window.location.href = "index.html";
+    return;
+  }
+
+  document.getElementById("Maison-name").textContent = maisonName;
+
+  logoutBtn.addEventListener("click", handleLogout);
+  backBtn.addEventListener("click", () => window.location.href = "maisons.html");
+  appartStatusFilter.addEventListener("change", handleFilterChange);
+  addAppartButton.addEventListener("click", openAddModal);
+  closeDetailsModal.addEventListener("click", () => closeModal("detailsModal"));
+  closeEditModal.addEventListener("click", () => closeModal("editModal"));
+  btnEnregistrer.addEventListener("click", saveModifications);
+  cancelEditBtn.addEventListener("click", () => closeModal("editModal"));
+  btnFermer.addEventListener("click", () => closeModal("detailsModal"));
+  prevPageBtn?.addEventListener("click", handlePrevPage);
+  nextPageBtn?.addEventListener("click", handleNextPage);
+
+  loadAppartements();
+}
+
 
 // 📌 Chargement des appartements
 async function loadAppartements() {
