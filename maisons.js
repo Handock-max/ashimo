@@ -69,7 +69,7 @@ function init() {
   });
 
   backBtn.addEventListener("click", () => {
-    window.history.back();
+     window.location.href = "accueil.html";
   });
 
   statusFilter.addEventListener("change", () => {
