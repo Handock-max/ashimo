@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Appartements</title>
   <link rel="stylesheet" href="apparts.css" />
 </head>
@@ -20,7 +20,6 @@
   </header>
 
   <main>
-    <!-- Toolbar Appartements -->
     <div id="appartToolbar">
       <div id="appartFilterSection">
         <label for="appartStatusFilter">Filtrer les appartements :</label>
@@ -41,18 +40,16 @@
       <!-- Cartes des appartements injectées ici -->
     </section>
 
-    <!-- Pagination -->
     <div id="pagination" style="text-align:center; margin-bottom: 1rem;">
       <button id="prevPageBtn" disabled>Précédent</button>
       <span id="pageIndicator"></span>
       <button id="nextPageBtn" disabled>Suivant</button>
     </div>
 
-    <!-- Fenêtre modale de détails -->
-    <div id="detailsModal" class="modal hidden">
+    <div id="detailsModal" class="modal hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="detailsTitle">
       <div class="modal-content">
-        <span class="close-btn" id="closeDetailsModal">&times;</span>
-        <h2 class="modal-title">Détails de l'appartement</h2>
+        <span class="close-btn" id="closeDetailsModal" aria-label="Fermer">&times;</span>
+        <h2 class="modal-title" id="detailsTitle">Détails de l'appartement</h2>
         <div class="modal-body"></div>
         <div class="modal-actions">
           <button id="btnModifier">Modifier</button>
@@ -62,12 +59,11 @@
       </div>
     </div>
 
-    <!-- Fenêtre modale de formulaire d'ajout/modification -->
-    <div id="editModal" class="modal hidden">
+    <div id="editModal" class="modal hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="editTitle">
       <div class="modal-content">
-        <span class="close-btn" id="closeEditModal">&times;</span>
-        <h2>Ajouter / Modifier un appartement</h2>
-        <form id="editForm" autocomplete="off">
+        <span class="close-btn" id="closeEditModal" aria-label="Fermer">&times;</span>
+        <h2 id="editTitle">Ajouter / Modifier un appartement</h2>
+        <form id="editForm" autocomplete="off" novalidate>
           <label>
             ID Appartement
             <input type="text" id="editID" readonly />
@@ -84,13 +80,13 @@
           </label>
 
           <label>
-            Type
-            <input type="text" id="editType" />
+            Type <span style="color:red">*</span>
+            <input type="text" id="editType" required />
           </label>
 
           <label>
             Prix (FCFA)
-            <input type="number" id="editPrix" />
+            <input type="number" id="editPrix" min="0" />
           </label>
 
           <label>
@@ -99,7 +95,7 @@
           </label>
 
           <label>
-            Statut
+            Statut <span style="color:red">*</span>
             <select id="editStatut" required>
               <option value="Libre">Libre</option>
               <option value="Occupé">Occupé</option>

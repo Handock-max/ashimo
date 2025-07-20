@@ -1,17 +1,17 @@
-// 📌 URLs des webhooks N8N
-const LOAD_APPARTS_URL = 'https://ash-automation.onrender.com/webhook/charger-apparts'; // GET avec ID_Maison
-const DELETE_APPART_URL = 'TON_URL_N8N_DELETE'; // POST avec ID_Appartement
-const UPDATE_APPART_URL = 'TON_URL_N8N_UPDATE'; // POST avec les champs à modifier
-const ADD_APPART_URL = 'TON_URL_N8N_ADD'; // POST avec les champs à ajouter
+// 📌 URLs des webhooks N8N (à configurer)
+const LOAD_APPARTS_URL = 'https://ash-automation.onrender.com/webhook/charger-apparts';
+const DELETE_APPART_URL = 'TON_URL_N8N_DELETE';  // à remplacer
+const UPDATE_APPART_URL = 'TON_URL_N8N_UPDATE';  // à remplacer
+const ADD_APPART_URL = 'TON_URL_N8N_ADD';        // à remplacer
 
-// 📌 Constantes et variables globales
+// 📌 Variables globales
 const ITEMS_PER_PAGE = 9;
 let currentPage = 1;
 let appartsData = [];
 let filteredApparts = [];
 let currentFilter = null;
 
-// 📌 Sélection des éléments DOM
+// 📌 Éléments DOM
 const appartGrid = document.getElementById("appartGrid");
 const appartStatusFilter = document.getElementById("appartStatusFilter");
 const addAppartButton = document.getElementById("addAppartButton");
@@ -28,43 +28,32 @@ const prevPageBtn = document.getElementById("prevPageBtn");
 const nextPageBtn = document.getElementById("nextPageBtn");
 const cancelEditBtn = document.getElementById("cancelEditBtn");
 
-// 📌 Fonction universelle d'enregistrement (ajout ou modification)
+// 📌 Fonction d’enregistrement
 function saveModifications() {
   const id = document.getElementById("editID").value;
   const maisonID = document.getElementById("editMaisonID").value;
   const etage = document.getElementById("editEtage").value.trim();
   const type = document.getElementById("editType").value.trim();
-  const prix = document.getElementById("editPrix").value;
+  const prix = parseFloat(document.getElementById("editPrix").value);
   const description = document.getElementById("editDescription").value.trim();
   const statut = document.getElementById("editStatut").value;
-  const occupants = document.getElementById("editOccupants").value;
+  const occupants = parseInt(document.getElementById("editOccupants").value) || 0;
 
-  if (!type) {
-    alert("Le type est requis.");
-    return;
-  }
-  if (!statut) {
-    alert("Le statut est requis.");
-    return;
-  }
+  if (!type) return alert("Le type est requis.");
+  if (!statut) return alert("Le statut est requis.");
 
   const data = {
     ID_Appart: id,
     ID_Maison: maisonID,
-    Étage: etage,
+    Étage: etage || null,
     Type: type,
-    Prix: prix,
-    Spécificité: description,
+    Prix: isNaN(prix) ? null : prix,
+    Spécificité: description || null,
     Statut: statut,
     Occupants: occupants
   };
 
-  if (id) {
-    modifierAppart(data);
-  } else {
-    ajouterAppart(data);
-  }
-
+  id ? modifierAppart(data) : ajouterAppart(data);
   closeModal("editModal");
 }
 
@@ -84,25 +73,24 @@ function init() {
 
   document.getElementById("Maison-name").textContent = maisonName;
 
-  logoutBtn.addEventListener("click", handleLogout);
-  backBtn.addEventListener("click", () => window.location.href = "maisons.html");
-  appartStatusFilter.addEventListener("change", handleFilterChange);
-  addAppartButton.addEventListener("click", openAddModal);
-  closeDetailsModal.addEventListener("click", () => closeModal("detailsModal"));
-  closeEditModal.addEventListener("click", () => closeModal("editModal"));
-  btnEnregistrer.addEventListener("click", saveModifications);
-  cancelEditBtn.addEventListener("click", () => closeModal("editModal"));
-  btnFermer.addEventListener("click", () => closeModal("detailsModal"));
-  prevPageBtn.addEventListener("click", handlePrevPage);
-  nextPageBtn.addEventListener("click", handleNextPage);
+  logoutBtn?.addEventListener("click", handleLogout);
+  backBtn?.addEventListener("click", () => window.location.href = "maisons.html");
+  appartStatusFilter?.addEventListener("change", handleFilterChange);
+  addAppartButton?.addEventListener("click", openAddModal);
+  closeDetailsModal?.addEventListener("click", () => closeModal("detailsModal"));
+  closeEditModal?.addEventListener("click", () => closeModal("editModal"));
+  btnEnregistrer?.addEventListener("click", saveModifications);
+  cancelEditBtn?.addEventListener("click", () => closeModal("editModal"));
+  btnFermer?.addEventListener("click", () => closeModal("detailsModal"));
+  prevPageBtn?.addEventListener("click", handlePrevPage);
+  nextPageBtn?.addEventListener("click", handleNextPage);
 
-  // Fermer modals en cliquant sur l'overlay
-  detailsModal.addEventListener("click", e => {
-    if (e.target === detailsModal) closeModal("detailsModal");
-  });
-  editModal.addEventListener("click", e => {
-    if (e.target === editModal) closeModal("editModal");
-  });
+  detailsModal?.addEventListener("click", e => { if (e.target === detailsModal) closeModal("detailsModal"); });
+  editModal?.addEventListener("click", e => { if (e.target === editModal) closeModal("editModal"); });
+
+  // Cacher les modales au démarrage
+  detailsModal.style.display = "none";
+  editModal.style.display = "none";
 
   loadAppartements();
 }
@@ -125,7 +113,7 @@ async function loadAppartements() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const json = await res.json();
 
-    appartsData = Array.isArray(json) ? json : [];
+    appartsData = Array.isArray(json) ? json.filter(app => app.ID_Maison === maisonID) : [];
     localStorage.setItem("AppartArray", JSON.stringify(appartsData));
     currentPage = 1;
     applyFilterAndRender();
@@ -134,7 +122,7 @@ async function loadAppartements() {
   }
 }
 
-// 📌 Appliquer le filtre et afficher
+// 📌 Appliquer filtre
 function applyFilterAndRender() {
   filteredApparts = currentFilter
     ? appartsData.filter(app => app.Statut === currentFilter)
@@ -142,7 +130,7 @@ function applyFilterAndRender() {
   renderApparts();
 }
 
-// 📌 Afficher les cartes d'appartements
+// 📌 Affichage cartes
 function renderApparts() {
   appartGrid.innerHTML = "";
 
@@ -155,7 +143,7 @@ function renderApparts() {
   }
 
   const maxPage = Math.ceil(filteredApparts.length / ITEMS_PER_PAGE);
-  if (currentPage > maxPage) currentPage = maxPage;
+  currentPage = Math.min(currentPage, maxPage);
 
   const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIdx = startIdx + ITEMS_PER_PAGE;
@@ -166,7 +154,7 @@ function renderApparts() {
     card.className = "appart-card";
 
     card.innerHTML = `
-      <img class="appart-img" src="${appart.Photos && appart.Photos.length ? appart.Photos[0] : 'appart.png'}" alt="Appart">
+      <img class="appart-img" src="${(appart.Photos && appart.Photos.length) ? appart.Photos[0] : 'appart.png'}" alt="Appart">
       <div class="appart-content">
         <h3>${appart.Type || 'N/A'}</h3>
         <p><strong>Étage:</strong> ${appart.Étage || 'N/A'}</p>
@@ -276,18 +264,18 @@ async function modifierAppart(data) {
   }
 }
 
-// 📌 Ouvrir modal ajout
+// 📌 Modal Ajout
 function openAddModal() {
   document.getElementById("editForm").reset();
   document.getElementById("editID").value = "";
   document.getElementById("editMaisonID").value = sessionStorage.getItem("currentMaisonId") || "";
+  document.getElementById("editMaisonID").readOnly = true;
   editModal.style.display = "flex";
 }
 
-// 📌 Ouvrir modal détails
+// 📌 Modal Détails
 function openDetailsModal(appart) {
   detailsModal.querySelector(".modal-title").textContent = appart.Type || 'Appartement';
-
   detailsModal.querySelector(".modal-body").innerHTML = `
     <p><strong>ID Appartement :</strong> ${appart.ID_Appart}</p>
     <p><strong>ID Maison :</strong> ${appart.ID_Maison}</p>
@@ -299,7 +287,6 @@ function openDetailsModal(appart) {
     <p><strong>Occupants :</strong> ${appart.Occupants || 0}</p>
     <p><strong>Photos :</strong> ${appart.Photos && appart.Photos.length ? appart.Photos.map(p => `<img src="${p}" style="max-width:80px; margin-right:5px; border-radius:4px;" alt="Photo">`).join('') : 'Aucune'}</p>
   `;
-
   document.getElementById("btnSupprimer").onclick = () => supprimerAppart(appart.ID_Appart);
   document.getElementById("btnModifier").onclick = () => {
     openEditModal(appart);
@@ -308,10 +295,11 @@ function openDetailsModal(appart) {
   detailsModal.style.display = "flex";
 }
 
-// 📌 Ouvrir modal édition
+// 📌 Modal Édition
 function openEditModal(appart) {
   document.getElementById("editID").value = appart.ID_Appart || "";
   document.getElementById("editMaisonID").value = sessionStorage.getItem("currentMaisonId") || "";
+  document.getElementById("editMaisonID").readOnly = true;
   document.getElementById("editEtage").value = appart.Étage || "";
   document.getElementById("editType").value = appart.Type || "";
   document.getElementById("editPrix").value = appart.Prix || "";
@@ -321,7 +309,7 @@ function openEditModal(appart) {
   editModal.style.display = "flex";
 }
 
-// 📌 Fermer un modal
+// 📌 Fermer modal
 function closeModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) modal.style.display = "none";
@@ -334,5 +322,5 @@ function handleLogout() {
   window.location.href = "index.html";
 }
 
-// 📌 Lancer l'app
+// 📌 Lancer app
 init();
