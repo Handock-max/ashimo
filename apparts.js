@@ -300,7 +300,7 @@ function openDetailsModal(appart) {
     openEditModal(appart);
     closeModal("detailsModal");
   };
-  detailsModal.style.display = "flex";
+  detailsModal.classList.remove("hidden");
 }
 
 // 📌 Modal Édition
@@ -314,13 +314,13 @@ function openEditModal(appart) {
   document.getElementById("editDescription").value = appart.Spécificité || "";
   document.getElementById("editStatut").value = appart.Statut || "Libre";
   document.getElementById("editOccupants").value = appart.Occupants || "";
-  editModal.style.display = "flex";
+  editModal.classList.remove("hidden");
 }
 
 // 📌 Fermer modal
 function closeModal(modalId) {
   const modal = document.getElementById(modalId);
-  if (modal) modal.style.display = "none";
+  if (modal) modal.classList.add("hidden");
 }
 
 // 📌 Déconnexion
