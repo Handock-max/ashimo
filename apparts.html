@@ -1,4 +1,3 @@
-<!-- apparts.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -13,7 +12,7 @@
       <button id="backBtn" aria-label="Retour" title="Retour">Retour</button>
     </div>
     <div class="header-center">
-      <h1 id="Maison-name">Nom de la maison</h1>
+      <h1 id="Maison-name"></h1>
     </div>
     <div class="header-right">
       <button id="logoutBtn" title="Déconnexion">Déconnexion</button>
@@ -38,19 +37,23 @@
       </div>
     </div>
 
-    <!-- Cartes des appartements -->
     <section id="appartGrid" class="grid-container">
-      <!-- Cartes injectées dynamiquement -->
+      <!-- Cartes des appartements injectées ici -->
     </section>
 
-    <!-- Détails -->
+    <!-- Pagination -->
+    <div id="pagination" style="text-align:center; margin-bottom: 1rem;">
+      <button id="prevPageBtn" disabled>Précédent</button>
+      <span id="pageIndicator"></span>
+      <button id="nextPageBtn" disabled>Suivant</button>
+    </div>
+
+    <!-- Fenêtre modale de détails -->
     <div id="detailsModal" class="modal hidden">
       <div class="modal-content">
         <span class="close-btn" id="closeDetailsModal">&times;</span>
         <h2 class="modal-title">Détails de l'appartement</h2>
-        <div class="modal-body">
-          <!-- Détails injectés dynamiquement -->
-        </div>
+        <div class="modal-body"></div>
         <div class="modal-actions">
           <button id="btnModifier">Modifier</button>
           <button id="btnSupprimer">Supprimer</button>
@@ -59,37 +62,59 @@
       </div>
     </div>
 
-    <!-- Formulaire -->
+    <!-- Fenêtre modale de formulaire d'ajout/modification -->
     <div id="editModal" class="modal hidden">
       <div class="modal-content">
         <span class="close-btn" id="closeEditModal">&times;</span>
         <h2>Ajouter / Modifier un appartement</h2>
-        <form id="editForm">
-          <input type="hidden" id="editID_Appart" name="ID_Appart" />
+        <form id="editForm" autocomplete="off">
+          <label>
+            ID Appartement
+            <input type="text" id="editID" readonly />
+          </label>
 
-          <label for="editID_Maison">Nom Maison</label>
-          <input type="text" id="editID_Maison" name="ID_Maison" required />
+          <label>
+            ID Maison
+            <input type="text" id="editMaisonID" readonly />
+          </label>
 
-          <label for="editEtage">Étage</label>
-          <input type="text" id="editEtage" name="Étage" required />
+          <label>
+            Étage
+            <input type="text" id="editEtage" />
+          </label>
 
-          <label for="editType">Type</label>
-          <input type="text" id="editType" name="Type" required />
+          <label>
+            Type
+            <input type="text" id="editType" />
+          </label>
 
-          <label for="editPrix">Prix mensuel</label>
-          <input type="number" id="editPrix" name="Prix mensuel" required />
+          <label>
+            Prix (FCFA)
+            <input type="number" id="editPrix" />
+          </label>
 
-          <label for="editStatut">Statut</label>
-          <select id="editStatut" name="Statut" required>
-            <option value="Libre">Libre</option>
-            <option value="Occupé">Occupé</option>
-          </select>
+          <label>
+            Spécificité
+            <textarea id="editDescription"></textarea>
+          </label>
 
-          <label for="editDescription">Spécificité</label>
-          <textarea id="editDescription" name="Spécificité"></textarea>
+          <label>
+            Statut
+            <select id="editStatut" required>
+              <option value="Libre">Libre</option>
+              <option value="Occupé">Occupé</option>
+            </select>
+          </label>
 
-          <label for="editPhotos">Photos</label>
-          <input type="file" id="editPhotos" name="Photos" accept="image/*" />
+          <label>
+            Occupants
+            <input type="number" id="editOccupants" min="0" />
+          </label>
+
+          <label>
+            Photos
+            <input type="file" id="editPhotos" name="Photos" accept="image/*" multiple />
+          </label>
 
           <div class="form-actions">
             <button type="button" id="btnEnregistrer">Enregistrer</button>

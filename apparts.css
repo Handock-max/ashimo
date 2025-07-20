@@ -10,7 +10,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #34495e; /* Match maisons.html header color */
+  background-color: #34495e;
   color: white;
   padding: 10px 20px;
 }
@@ -121,6 +121,7 @@ header h1#Maison-name {
   display: flex;
   flex-direction: row;
   position: relative;
+  cursor: pointer;
 }
 
 .appart-img {
@@ -160,16 +161,19 @@ header h1#Maison-name {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px); /* ✅ Ajouté pour effet flou */
+  backdrop-filter: blur(4px);
   display: flex !important;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  animation: fadeIn 0.3s ease;
 }
 
 .modal.hidden {
   display: none;
+}
+
+.modal {
+  animation: fadeIn 0.3s ease;
 }
 
 @keyframes fadeIn {
@@ -258,4 +262,26 @@ form textarea {
 
 .modal-actions button#btnFermer:hover {
   background-color: #c0392b;
+}
+
+/* Pagination buttons styling */
+#pagination button {
+  padding: 8px 12px;
+  margin: 0 5px;
+  border-radius: 5px;
+  border: 1px solid #1976d2;
+  background-color: white;
+  color: #1976d2;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#pagination button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+#pagination button:hover:not(:disabled) {
+  background-color: #1976d2;
+  color: white;
 }
