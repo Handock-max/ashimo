@@ -153,26 +153,32 @@ header h1#Maison-name {
   background-color: #c0392b !important;
 }
 
-/* Modals */
+/* ================================
+   📌 Modals (Details & Edit)
+   ================================ */
+
+/* Cache les modales par défaut */
 .modal-hidden {
+  display: none !important;
+}
+
+/* Fond de modale plein écran */
+#detailsModal,
+#editModal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  display: flex !important;
+  display: flex;
   align-items: center;
   justify-content: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
   z-index: 1000;
 }
 
- .modal-hidden{
-  display: none;
-}
-
-
+/* Contenu commun aux modales */
 .modal-content {
   background: white;
   padding: 20px;
@@ -182,6 +188,13 @@ header h1#Maison-name {
   position: relative;
   max-height: 90vh;
   overflow-y: auto;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Animation de fondu */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .close-btn {
@@ -245,7 +258,7 @@ form textarea {
   background-color: #c0392b;
 }
 
-/* Pagination buttons styling */
+/* Pagination */
 #pagination button {
   padding: 8px 12px;
   margin: 0 5px;
