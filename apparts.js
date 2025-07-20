@@ -49,6 +49,7 @@ function saveModifications() {
   const statut = document.getElementById("editStatut").value;
   const occupants = parseInt(document.getElementById("editOccupants").value) || 0;
 
+  if (!etage) return alert("L'étage est requis.");
   if (!type) return alert("Le type est requis.");
   if (!statut) return alert("Le statut est requis.");
 
