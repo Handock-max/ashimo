@@ -172,14 +172,6 @@ header h1#Maison-name {
   display: none;
 }
 
-.modal {
-  animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
 
 .modal-content {
   background: white;
