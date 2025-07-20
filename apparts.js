@@ -35,6 +35,7 @@ function saveModifications() {
   const nom = document.getElementById("editNom").value.trim();
   const statut = document.getElementById("editStatut").value;
   const prix = document.getElementById("editPrix").value;
+  const type = document.getElementById("editType").value;
   const description = document.getElementById("editDescription").value;
   const maisonID = sessionStorage.getItem("currentMaisonId");
 
@@ -49,7 +50,8 @@ function saveModifications() {
     Statut: statut,
     Prix: prix,
     Description: description,
-    ID_Maison: maisonID
+    ID_Maison: maisonID,
+    Type : type
   };
 
   if (id) {
@@ -151,7 +153,7 @@ function renderApparts() {
       <div class="appart-content">
         <h3>${appart.Nom_Appartement}</h3>
         <p><strong>Type:</strong> ${appart.Type}</p>
-        <p><strong>Prix:</strong> ${appart.Prix mensuel} FCFA</p>
+        <p><strong>Prix:</strong> ${appart.Prix} FCFA</p>
         <p><strong>Spécificité:</strong> ${appart.Description || 'N/A'}</p>
 
       </div>
@@ -283,6 +285,7 @@ function openEditModal(appart) {
   document.getElementById("editNom").value = appart.Nom_Appartement;
   document.getElementById("editStatut").value = appart.Statut;
   document.getElementById("editPrix").value = appart.Prix || "";
+  document.getElementById("editType").value = appart.Type || "";
   document.getElementById("editDescription").value = appart.Description || "";
   editModal.style.display = "block";
 }
