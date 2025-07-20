@@ -118,7 +118,7 @@ async function loadAppartements() {
     if (storedApparts) {
       appartsData = JSON.parse(storedApparts);
       currentPage = 1;
-      applyFilterAndRender(maisonID);
+      applyFilterAndRender();
       return;
     }
 
@@ -129,7 +129,7 @@ async function loadAppartements() {
     appartsData = Array.isArray(json) ? json: [];
     localStorage.setItem("AppartArray", JSON.stringify(appartsData));
     currentPage = 1;
-    applyFilterAndRender(maisonID);
+    applyFilterAndRender();
   } catch (e) {
     alert("Erreur de chargement : " + e.message);
   }
@@ -137,9 +137,19 @@ async function loadAppartements() {
 
 // 📌 Appliquer filtre
 function applyFilterAndRender() {
-  filteredApparts = currentFilter
-    ? appartsData.filter(app => app.Statut === currentFilter)
-    : [...appartsData];
+  const maisonID = sessionStorage.getItem("currentMaisonId");
+
+  if (!maisonID) {
+    alert("Maison non trouvée. Veuillez retourner à la page des maisons.");
+    return;
+  }
+
+  filteredApparts = appartsData.filter(app => {
+    const maisonOK = app.ID_Maison == maisonID;
+    const statutOK = currentFilter ? app.Statut === currentFilter : true;
+    return maisonOK && statutOK;
+  });
+
   renderApparts();
 }
 
