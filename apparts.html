@@ -62,41 +62,42 @@
         <span class="close-btn" id="closeEditModal">&times;</span>
         <h2>Ajouter / Modifier un appartement</h2>
         <form id="editForm">
-          <input type="hidden" id="editID" />
-          
-          <label>
-            Nom
-            <input type="text" id="editNom" required />
-          </label>
+            <input type="hidden" id="editID" />
 
-          <label>
-            Statut
-            <select id="editStatut" required>
-              <option value="Libre">Libre</option>
-              <option value="Occupé">Occupé</option>
-            </select>
-          </label>
+            <label>
+                Nom
+                <input type="text" id="editNom" required />
+            </label>
 
-          <label>
-            Prix
-            <input type="number" id="editPrix" />
-          </label>
+            <label>
+                Statut
+                <select id="editStatut" required>
+                <option value="Libre">Libre</option>
+                <option value="Occupé">Occupé</option>
+                </select>
+            </label>
 
-          <label>
-            Description
-            <textarea id="editDescription"></textarea>
-          </label>
+            <label>
+                Prix
+                <input type="number" id="editPrix" />
+            </label>
 
-          <label>
-            Photos
-            <input type="file" name="Photos" accept="image/*" />
-          </label>
+            <label>
+                Spécificité
+                <textarea id="editDescription"></textarea>
+            </label>
 
-          <div class="form-actions">
-            <button type="button" id="btnEnregistrer">Enregistrer</button>
-            <button type="button" id="cancelEditBtn">Annuler</button>
-          </div>
+            <label>
+                Photos
+                <input type="file" name="Photos" accept="image/*" />
+            </label>
+
+            <div class="form-actions">
+                <button type="button" id="btnEnregistrer">Enregistrer</button>
+                <button type="button" id="cancelEditBtn">Annuler</button>
+            </div>
         </form>
+
       </div>
     </div>
   </main>

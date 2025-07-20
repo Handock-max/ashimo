@@ -151,7 +151,9 @@ function renderApparts() {
       <div class="appart-content">
         <h3>${appart.Nom_Appartement}</h3>
         <p><strong>Type:</strong> ${appart.Type}</p>
-        <p><strong>Prix:</strong> ${appart.Prix || 'N/A'} FCFA</p>
+        <p><strong>Prix:</strong> ${appart.Prix mensuel} FCFA</p>
+        <p><strong>Spécificité:</strong> ${appart.Description || 'N/A'}</p>
+
       </div>
       <div class="status-banner ${appart.Statut === 'Occupé' ? 'status-occupé' : ''}">
         ${appart.Statut}
