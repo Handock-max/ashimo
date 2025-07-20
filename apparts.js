@@ -112,33 +112,38 @@ function init() {
 // 📌 Chargement des appartements
 
 async function loadAppartements() {
+
   try {
     const maisonID = sessionStorage.getItem("currentMaisonId");
     const storedApparts = localStorage.getItem("AppartArray");
 
-
-    if (storedApparts) {
-      
-          appartsData = JSON.parse(storedApparts);
-          currentPage = 1;
-          applyFilterAndRender();
-          return; // On sort de la fonction, pas besoin de fetch
-        }
-
-    const res = await fetch(LOAD_APPARTS_URL);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
-      appartsData = Array.isArray(json) ? json : [];
-      localStorage.setItem("AppartArray", JSON.stringify(appartsData));
+    if (storedApparts) { // Vérification du cache localStorage
+      // 🔁 Chargement depuis le cache localStorage
+      appartData = JSON.parse(storedApparts); // Chargement depuis le cache localStorage
       currentPage = 1;
-      applyFilterAndRender();
+      applyFilterAndRender();// Affichage des appartements filtrés
+      return; // On sort de la fonction, pas besoin de fetch
+    }
+
+    const res = await fetch(LOAD_APPARTS_URL); // Requête pour charger les appartements
+    if (!res.ok) throw new Error(`HTTP ${res.status}`); // Vérification de la réponse
+
+    const json = await res.json();// Conversion de la réponse en JSON
+    appartsData = Array.isArray(json) ? json : [];// Vérification que c'est un tableau
+
+    // 🔁 Stockage brut dans localStorage (pas filtré)
+    localStorage.setItem("AppartArray", JSON.stringify(appartsData));
+
+    currentPage = 1;// Réinitialisation de la page courante
+    applyFilterAndRender();// Affichage des appartements filtrés
   } catch (e) {
-    alert("Erreur de chargement : " + e.message);
+    alert("Erreur réseau : " + e.message); // Affichage d'une alerte en cas d'erreur
   }
 }
 
 
 // 📌 Appliquer filtre
+
 function applyFilterAndRender() {
   const maisonID = sessionStorage.getItem("currentMaisonId");
 
@@ -153,11 +158,12 @@ function applyFilterAndRender() {
     return maisonOK && statutOK;
   });
 
-  renderApparts();
+  renderApparts(); // Affichage des appartements filtrés
 }
 
 // 📌 Affichage cartes
 function renderApparts() {
+  //
   appartGrid.innerHTML = "";
 
   if (!filteredApparts.length) {
