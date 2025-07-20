@@ -110,30 +110,44 @@ function init() {
 
 
 // 📌 Chargement des appartements
+
 async function loadAppartements() {
   try {
     const maisonID = sessionStorage.getItem("currentMaisonId");
     const storedApparts = localStorage.getItem("AppartArray");
 
+    let useFetch = true;// Par défaut, on utilise fetch pour charger les données
+
     if (storedApparts) {
-      appartsData = JSON.parse(storedApparts);
-      currentPage = 1;
-      applyFilterAndRender();
-      return;
+      try {
+        const appartsArray = JSON.parse(storedApparts);// Tente de parser le JSON stocké
+        if (Array.isArray(appartsArray)) {
+          appartsData = appartsArray;
+          currentPage = 1;
+          applyFilterAndRender();
+          useFetch = false;
+          // Si le localStorage contient des données valides, on n'utilise pas fetch
+        }
+      } catch (e) {
+        console.warn("Erreur de parsing du localStorage :", e.message);
+      }
     }
 
-    const res = await fetch(LOAD_APPARTS_URL);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
+    if (useFetch) {
+      const res = await fetch(LOAD_APPARTS_URL);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json = await res.json();
 
-    appartsData = Array.isArray(json) ? json: [];
-    localStorage.setItem("AppartArray", JSON.stringify(appartsData));
-    currentPage = 1;
-    applyFilterAndRender();
+      appartsData = Array.isArray(json) ? json : [];
+      localStorage.setItem("AppartArray", JSON.stringify(appartsData));
+      currentPage = 1;
+      applyFilterAndRender();
+    }
   } catch (e) {
     alert("Erreur de chargement : " + e.message);
   }
 }
+
 
 // 📌 Appliquer filtre
 function applyFilterAndRender() {
