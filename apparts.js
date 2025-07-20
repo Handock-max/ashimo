@@ -28,6 +28,16 @@ const prevPageBtn = document.getElementById("prevPageBtn");
 const nextPageBtn = document.getElementById("nextPageBtn");
 const cancelEditBtn = document.getElementById("cancelEditBtn");
 
+
+// Cacher les modales au démarrage
+    function openModal(id) {
+  document.getElementById(id).classList.remove("hidden");
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add("hidden");
+    }
+
 // 📌 Fonction d’enregistrement
 function saveModifications() {
   const id = document.getElementById("editID").value;
@@ -88,12 +98,11 @@ function init() {
   detailsModal?.addEventListener("click", e => { if (e.target === detailsModal) closeModal("detailsModal"); });
   editModal?.addEventListener("click", e => { if (e.target === editModal) closeModal("editModal"); });
 
-  // Cacher les modales au démarrage
-  detailsModal.style.display = "none";
-  editModal.style.display = "none";
 
   loadAppartements();
 }
+
+
 
 // 📌 Chargement des appartements
 async function loadAppartements() {
