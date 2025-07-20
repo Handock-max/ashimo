@@ -229,31 +229,23 @@ form textarea {
   border-radius: 4px;
 }
 
-/* Affichage général de la modale */
-#detailsModal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(4px);
-  background-color: rgba(0, 0, 0, 0.4);
-  z-index: 9999;
-  display: flex; /* mais ce sera écrasé par modal-hidden */
+#editModal .modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
-/* Contenu de la modale */
-#detailsModal .modal-content {
-  background: white;
-  border-radius: 12px;
-  padding: 20px;
-  max-width: 90%;
-  max-height: 90%;
-  overflow-y: auto;
-  box-shadow: 0 0 20px rgba(0,0,0,0.25);
-  animation: fadeIn 0.3s ease-in-out;
+#editModal .form-actions button {
+  background-color: #27ae60;
+}
+
+#editModal .form-actions button:hover {
+  background-color: #2ecc71;
 }
 
 .modal-actions button#btnFermer {
