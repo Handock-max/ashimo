@@ -168,7 +168,7 @@ header h1#Maison-name {
   z-index: 1000;
 }
 
-.modal.hidden {
+ .modal-hidden{
   display: none;
 }
 

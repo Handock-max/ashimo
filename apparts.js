@@ -31,11 +31,11 @@ const cancelEditBtn = document.getElementById("cancelEditBtn");
 
 // Cacher les modales au démarrage
     function openModal(id) {
-  document.getElementById(id).classList.remove("hidden");
+  document.getElementById(id).classList.remove("modal-hidden");
     }
 
     function closeModal(id) {
-      document.getElementById(id).classList.add("hidden");
+      document.getElementById(id).classList.add("modal-hidden");
     }
 
 // 📌 Fonction d’enregistrement
@@ -87,17 +87,22 @@ function init() {
   backBtn?.addEventListener("click", () => window.location.href = "maisons.html");
   appartStatusFilter?.addEventListener("change", handleFilterChange);
   addAppartButton?.addEventListener("click", openAddModal);
-  closeDetailsModal?.addEventListener("click", () => closeModal("detailsModal"));
-  closeEditModal?.addEventListener("click", () => closeModal("editModal"));
+  
+  closeDetailsModal?.addEventListener("click", () => {
+    closeModal("detailsModal")
+  });
+  closeEditModal?.addEventListener("click", () => {
+    closeModal("editModal")
+  });
   btnEnregistrer?.addEventListener("click", saveModifications);
-  cancelEditBtn?.addEventListener("click", () => closeModal("editModal"));
-  btnFermer?.addEventListener("click", () => closeModal("detailsModal"));
+  cancelEditBtn?.addEventListener("click", () => {
+    closeModal("editModal")
+  });
+  btnFermer?.addEventListener("click", () => {
+    closeModal("detailsModal")
+  });
   prevPageBtn?.addEventListener("click", handlePrevPage);
   nextPageBtn?.addEventListener("click", handleNextPage);
-
-  detailsModal?.addEventListener("click", e => { if (e.target === detailsModal) closeModal("detailsModal"); });
-  editModal?.addEventListener("click", e => { if (e.target === editModal) closeModal("editModal"); });
-
 
   loadAppartements();
 }
@@ -300,7 +305,7 @@ function openDetailsModal(appart) {
     openEditModal(appart);
     closeModal("detailsModal");
   };
-  detailsModal.classList.remove("hidden");
+  detailsModal.classList.remove("modal-hidden");
 }
 
 // 📌 Modal Édition
@@ -314,13 +319,13 @@ function openEditModal(appart) {
   document.getElementById("editDescription").value = appart.Spécificité || "";
   document.getElementById("editStatut").value = appart.Statut || "Libre";
   document.getElementById("editOccupants").value = appart.Occupants || "";
-  editModal.classList.remove("hidden");
+  editModal.classList.remove("modal-hidden");
 }
 
 // 📌 Fermer modal
 function closeModal(modalId) {
   const modal = document.getElementById(modalId);
-  if (modal) modal.classList.add("hidden");
+  if (modal) modal.classList.add("modal-hidden");
 }
 
 // 📌 Déconnexion
