@@ -279,7 +279,6 @@ function openAddModal() {
   document.getElementById("editID").value = "";
   document.getElementById("editMaisonID").value = sessionStorage.getItem("currentMaisonId") || "";
   document.getElementById("editMaisonID").readOnly = true;
-  editModal.style.display = "flex";
 }
 
 // 📌 Modal Détails
