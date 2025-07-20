@@ -154,7 +154,7 @@ header h1#Maison-name {
 }
 
 /* Modals */
-.modal {
+.modal-hidden {
   position: fixed;
   top: 0;
   left: 0;
