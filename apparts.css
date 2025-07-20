@@ -232,7 +232,6 @@ form textarea {
 /* Affichage général de la modale */
 #detailsModal {
   position: fixed;
-  display: none; /* Masqué par défaut */
   top: 0;
   left: 0;
   width: 100vw;
@@ -242,10 +241,11 @@ form textarea {
   backdrop-filter: blur(4px);
   background-color: rgba(0, 0, 0, 0.4);
   z-index: 9999;
+  display: flex; /* mais ce sera écrasé par modal-hidden */
 }
 
-/* Le contenu interne de la modale */
-#editModal .modal-content {
+/* Contenu de la modale */
+#detailsModal .modal-content {
   background: white;
   border-radius: 12px;
   padding: 20px;
@@ -254,11 +254,6 @@ form textarea {
   overflow-y: auto;
   box-shadow: 0 0 20px rgba(0,0,0,0.25);
   animation: fadeIn 0.3s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
 .modal-actions button#btnFermer {
