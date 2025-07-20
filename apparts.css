@@ -232,6 +232,7 @@ form textarea {
 /* Affichage général de la modale */
 #detailsModal {
   position: fixed;
+  display: none; /* Masqué par défaut */
   top: 0;
   left: 0;
   width: 100vw;
