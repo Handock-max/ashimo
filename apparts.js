@@ -116,22 +116,14 @@ async function loadAppartements() {
     const maisonID = sessionStorage.getItem("currentMaisonId");
     const storedApparts = localStorage.getItem("AppartArray");
 
-    let useFetch = true;// Par défaut, on utilise fetch pour charger les données
 
     if (storedApparts) {
-      try {
-        const appartsArray = JSON.parse(storedApparts);// Tente de parser le JSON stocké
-        if (Array.isArray(appartsArray)) {
-          appartsData = appartsArray;
+      
+          appartsData = JSON.parse(storedApparts);
           currentPage = 1;
           applyFilterAndRender();
-          useFetch = false;
-          // Si le localStorage contient des données valides, on n'utilise pas fetch
+          return; // On sort de la fonction, pas besoin de fetch
         }
-      } catch (e) {
-        console.warn("Erreur de parsing du localStorage :", e.message);
-      }
-    }
 
     if (useFetch) {
       const res = await fetch(LOAD_APPARTS_URL);
