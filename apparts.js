@@ -125,16 +125,13 @@ async function loadAppartements() {
           return; // On sort de la fonction, pas besoin de fetch
         }
 
-    if (useFetch) {
-      const res = await fetch(LOAD_APPARTS_URL);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const json = await res.json();
-
+    const res = await fetch(LOAD_APPARTS_URL);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
       appartsData = Array.isArray(json) ? json : [];
       localStorage.setItem("AppartArray", JSON.stringify(appartsData));
       currentPage = 1;
       applyFilterAndRender();
-    }
   } catch (e) {
     alert("Erreur de chargement : " + e.message);
   }
