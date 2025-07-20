@@ -116,10 +116,9 @@ async function loadAppartements() {
     const storedApparts = localStorage.getItem("AppartArray");
 
     if (storedApparts) {
-      const appartsArray = JSON.parse(storedApparts);
-      appartsData = appartsArray.filter(app => app.ID_Maison === maisonID);
+      appartsData = JSON.parse(storedApparts);
       currentPage = 1;
-      applyFilterAndRender();
+      applyFilterAndRender(maisonID);
       return;
     }
 
@@ -127,10 +126,10 @@ async function loadAppartements() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const json = await res.json();
 
-    appartsData = Array.isArray(json) ? json.filter(app => app.ID_Maison === maisonID) : [];
+    appartsData = Array.isArray(json) ? json: [];
     localStorage.setItem("AppartArray", JSON.stringify(appartsData));
     currentPage = 1;
-    applyFilterAndRender();
+    applyFilterAndRender(maisonID);
   } catch (e) {
     alert("Erreur de chargement : " + e.message);
   }

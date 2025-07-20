@@ -129,11 +129,24 @@ cancelDeleteBtn.addEventListener("click", () => {
 // --- Chargement des maisons --- (réponse N8N = tableau direct)
 async function loadMaisons() {
   try {
-    const res = await fetch(LOAD_MAISON_URL);
-    const json = await res.json();
+    const storedMaisons = localStorage.getItem("MaisonArray");
 
-    // La réponse est directement un tableau de maisons
+    if (storedMaisons) {
+      maisonsData = JSON.parse(storedMaisons);
+      currentPage = 1;
+      filteredMaisons = filterMaisons();
+      renderMaisons();
+      return; // On sort de la fonction, pas besoin de fetch
+    }
+
+    const res = await fetch(LOAD_MAISON_URL);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const json = await res.json();
     maisonsData = Array.isArray(json) ? json : [];
+
+    // 🔁 Stockage brut dans localStorage (pas filtré)
+    localStorage.setItem("MaisonArray", JSON.stringify(maisonsData));
 
     currentPage = 1;
     filteredMaisons = filterMaisons();
@@ -247,7 +260,9 @@ function hideFormModal() {
   formModal.classList.add("hidden");
   currentEditId = null;
 }
-
+function clearMaisonCache() {
+  localStorage.removeItem("MaisonArray");
+}
 // --- Gestion formulaire Ajout / Modification ---
 
 async function handleFormSubmit(e) {
@@ -318,6 +333,7 @@ async function handleFormSubmit(e) {
       alert(result.message || "Maison enregistrée avec succès");
       maisonForm.reset();
       hideFormModal();
+      clearMaisonCache(); // Efface le cache localStorage pour forcer le rechargement
       loadMaisons();
     } else {
       alert("Erreur : " + (result.message || "Erreur inconnue"));
@@ -365,6 +381,7 @@ async function handleConfirmDelete() {
       deleteModal.classList.add("hidden");
       maisonToDelete = null;
       confirmBusinessInput.value = "";
+      clearMaisonCache(); // Efface le cache localStorage pour forcer le rechargement
       loadMaisons();
     } else {
       alert("Erreur : " + (result.message || "Erreur inconnue"));
