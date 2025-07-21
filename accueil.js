@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
       sessionStorage.clear();
       localStorage.clear();      
       alert("Session expirée après 5 minutes d'inactivité.");
-      window.location.href = "login.html";
+      window.location.href = "index.html";
     }, 5 * 60 * 1000); // 5 minutes
   }
 
