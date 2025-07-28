@@ -1,7 +1,7 @@
 // 📌 URLs des webhooks N8N (à configurer)
 const LOAD_APPARTS_URL = 'https://ash-automation.onrender.com/webhook/charger-apparts';
 const DELETE_APPART_URL = 'TON_URL_N8N_DELETE';  // à remplacer
-const UPDATE_APPART_URL = 'https://ash-automation.onrender.com/webhook/modifier-appart';
+const UPDATE_APPART_URL = 'https://ash-automation.onrender.com/webhook/modifier-appart';//déjà remplacer
 const ADD_APPART_URL = 'TON_URL_N8N_ADD';        // à remplacer
 
 // 📌 Variables globales
