@@ -56,7 +56,7 @@ function saveModifications() {
   const data = {
     ID_Appart: id,
     ID_Maison: maisonID,
-    Étage: etage || null,
+    Etage: etage || null,
     Type: type,
     Prix: isNaN(prix) ? null : prix,
     Spécificité: description || null,
@@ -190,7 +190,7 @@ function renderApparts() {
       <img class="appart-img" src="${(appart.Photos && appart.Photos.length) ? appart.Photos[0] : 'appart.png'}" alt="Appart">
       <div class="appart-content">
         <h3>${appart.Type || 'N/A'}</h3>
-        <p><strong>Étage:</strong> ${appart.Étage || 'N/A'}</p>
+        <p><strong>Etage:</strong> ${appart.Etage || 'N/A'}</p>
         <p><strong>Prix:</strong> ${appart.Prix ? appart.Prix + " FCFA" : 'N/A'}</p>
         <p><strong>Spécificité:</strong> ${appart.Spécificité || 'N/A'}</p>
         <p><strong>Occupants:</strong> ${appart.Occupants || 0}</p>
@@ -311,7 +311,7 @@ function openDetailsModal(appart) {
   detailsModal.querySelector(".modal-body").innerHTML = `
     <p><strong>ID Appartement :</strong> ${appart.ID_Appart}</p>
     <p><strong>ID Maison :</strong> ${appart.ID_Maison}</p>
-    <p><strong>Étage :</strong> ${appart.Étage || 'N/A'}</p>
+    <p><strong>Etage :</strong> ${appart.Etage || 'N/A'}</p>
     <p><strong>Type :</strong> ${appart.Type || 'N/A'}</p>
     <p><strong>Prix :</strong> ${appart.Prix ? appart.Prix + ' FCFA' : 'N/A'}</p>
     <p><strong>Spécificité :</strong> ${appart.Spécificité || 'N/A'}</p>
@@ -332,7 +332,7 @@ function openEditModal(appart) {
   document.getElementById("editID").value = appart.ID_Appart || "";
   document.getElementById("editMaisonID").value = sessionStorage.getItem("currentMaisonId") || "";
   document.getElementById("editMaisonID").readOnly = true;
-  document.getElementById("editEtage").value = appart.Étage || "";
+  document.getElementById("editEtage").value = appart.Etage || "";
   document.getElementById("editType").value = appart.Type || "";
   document.getElementById("editPrix").value = appart.Prix || "";
   document.getElementById("editDescription").value = appart.Spécificité || "";
