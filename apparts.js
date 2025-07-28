@@ -287,8 +287,8 @@ async function modifierAppart(data) {
 
     if (res.ok) {
       localStorage.removeItem("AppartArray");
-      alert("Modification réussie.");
-      init();
+      alert("L'appartement a bien été changé.");
+      loadAppartements();
     } else {
       alert("Erreur lors de la modification.");
     }
